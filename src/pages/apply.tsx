@@ -76,7 +76,7 @@ export default function ApplyPage() {
   // Official Google Apps Script Web App endpoint for IEEE PEC Google Sheet
   const GOOGLE_SCRIPT_URL =
     process.env.NEXT_PUBLIC_GOOGLE_SHEET_API_URL ||
-    "https://script.google.com/macros/s/AKfycbzbyWLat9tbUQHHLEmc5_T6g4aF8BE766bWD-19KVIGEbWLIVt-rQsBBC5Mn_3oNjkhdQ/exec";
+    "https://script.google.com/macros/s/AKfycbxoYcV9T4v57NLqOgbA8ZjxX_L9nuhddS7IhksG5sm8_SV31WrmrzoL7byRC1bKZxx-cA/exec";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
