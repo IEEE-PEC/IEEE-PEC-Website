@@ -178,18 +178,30 @@ To build the project for static hosting (e.g. GitHub Pages, Vercel, Netlify, or 
 npm run build
 ```
 
-The output will be generated in the `out/` folder, ready for instant static delivery.
+The output will be generated in the `out/` folder as pure pre-rendered HTML, CSS, JavaScript, and optimized media ready for instant static delivery.
 
 ---
 
-## 🚢 Continuous Deployment (GitHub Pages)
+## 🚢 Continuous Deployment & Hosting Architecture
 
-This repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys the website on every push to the `main` branch:
+### How Next.js Static Export Works on GitHub Pages
+1. **GitHub Actions Build Pipeline:** When code is pushed to `main`, GitHub Actions uses Node.js in an isolated container to run `npm run build`.
+2. **Pre-rendering:** Next.js compiles all dynamic pages, components, and datasets into static `.html`, `.css`, and `.js` files in the `./out` directory.
+3. **Pure Static Serving:** GitHub Pages serves the `./out` artifact directly across GitHub's global CDN. **No live Node.js runtime server is required on the host.**
 
-1. Push your changes to the `main` branch.
-2. In your GitHub repository, go to **Settings** > **Pages**.
-3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
-4. The deployment pipeline will automatically run and publish the website live!
+### One-Time Setup for Repository Maintainers
+1. In your GitHub repository, navigate to **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
+3. All subsequent commits to `main` will automatically build and publish the website live!
+
+---
+
+## 🤝 Contributing & Code Guidelines
+
+We welcome contributions from IEEE PEC members, student developers, and maintainers! Please refer to the **[CONTRIBUTING.md](CONTRIBUTING.md)** guide for:
+- How to add or update events, projects, resources, and team profiles in `src/data/`
+- Branch naming and conventional commit standards
+- Pull request review guidelines
 
 ---
 
