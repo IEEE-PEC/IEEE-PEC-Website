@@ -10,6 +10,7 @@ import {
   Award,
   Layers,
 } from "lucide-react";
+import { getAssetPath } from "@/lib/utils";
 
 const heroSlides = [
   {
@@ -75,7 +76,7 @@ export default function Hero() {
             <div
               className="w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage: `url(${currentSlide.image})`,
+                backgroundImage: `url(${getAssetPath(currentSlide.image)})`,
               }}
             />
             {/* Deep gradient overlay for optimal readability */}

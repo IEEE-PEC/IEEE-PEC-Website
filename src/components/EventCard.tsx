@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { getAssetPath } from "@/lib/utils";
 
 export default function EventCard({ event }: { event: EventType }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function EventCard({ event }: { event: EventType }) {
         {event.image && (
           <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
             <img
-              src={event.image}
+              src={getAssetPath(event.image)}
               alt={event.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
@@ -98,7 +99,7 @@ export default function EventCard({ event }: { event: EventType }) {
             {event.image && (
               <div className="relative h-56 w-full rounded-xl overflow-hidden bg-slate-100">
                 <img
-                  src={event.image}
+                  src={getAssetPath(event.image)}
                   alt={event.title}
                   className="w-full h-full object-cover"
                 />

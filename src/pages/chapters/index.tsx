@@ -5,6 +5,7 @@ import { chaptersData } from "@/data/chapters_data";
 import { Code, Zap, HeartHandshake, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getAssetPath } from "@/lib/utils";
 
 const iconMap: Record<string, any> = {
   Code,
@@ -54,7 +55,7 @@ export default function ChaptersPage() {
                       {chapter.logoImage ? (
                         <div className="h-14 w-auto max-w-[140px] rounded-2xl bg-white p-1.5 shadow-sm border border-border flex items-center justify-center">
                           <img
-                            src={chapter.logoImage}
+                            src={getAssetPath(chapter.logoImage)}
                             alt={chapter.name}
                             className="h-full w-auto object-contain"
                           />
@@ -126,7 +127,7 @@ export default function ChaptersPage() {
                   <div className="lg:col-span-5 space-y-4">
                     <div className="relative h-72 rounded-2xl overflow-hidden shadow-lg border border-border">
                       <img
-                        src={chapter.bannerImage}
+                        src={getAssetPath(chapter.bannerImage)}
                         alt={chapter.name}
                         className="w-full h-full object-cover"
                       />

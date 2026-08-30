@@ -20,6 +20,7 @@ import {
   Zap,
   CheckCircle2,
 } from "lucide-react";
+import { getAssetPath } from "@/lib/utils";
 
 export default function Home() {
   const featuredProjects = projectsData.slice(0, 3);
@@ -111,7 +112,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border">
                 <img
-                  src="/images/events/award-ceremony.jpg"
+                  src={getAssetPath("/images/events/award-ceremony.jpg")}
                   alt="IEEE PEC Outstanding Student Branch Award Ceremony"
                   className="w-full h-full object-cover"
                 />

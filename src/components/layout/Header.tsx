@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { getAssetPath } from "@/lib/utils";
 
 const navigation = [
   { name: "Home", href: "/", icon: Sparkles },
@@ -38,7 +39,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md border border-border/80 p-1 group-hover:scale-105 transition-transform duration-200">
               <img
-                src="/images/logos/ieee-pec-logo.png"
+                src={getAssetPath("/images/logos/ieee-pec-logo.png")}
                 alt="IEEE PEC SB Emblem"
                 className="w-full h-full object-contain"
               />

@@ -12,6 +12,7 @@ import {
   Shield,
   Award,
 } from "lucide-react";
+import { getAssetPath } from "@/lib/utils";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -57,8 +58,8 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center p-1 shadow-md border border-white/20">
                 <img
-                  src="/images/logos/ieee-pec-logo.png"
-                  alt="IEEE PEC Logo"
+                  src={getAssetPath("/images/logos/ieee-pec-logo.png")}
+                  alt="IEEE PEC SB Logo"
                   className="w-full h-full object-contain"
                 />
               </div>

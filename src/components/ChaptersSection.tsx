@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { chaptersData } from "@/data/chapters_data";
 import { Code, Zap, HeartHandshake, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getAssetPath } from "@/lib/utils";
 
 const iconMap: Record<string, any> = {
   Code,
@@ -49,7 +50,7 @@ export default function ChaptersSection() {
                     {chapter.logoImage ? (
                       <div className="h-12 w-auto max-w-[120px] rounded-xl bg-white p-1 shadow-sm border border-border flex items-center justify-center">
                         <img
-                          src={chapter.logoImage}
+                          src={getAssetPath(chapter.logoImage)}
                           alt={chapter.name}
                           className="h-full w-auto object-contain"
                         />

@@ -14,6 +14,7 @@ import {
   ExternalLink,
   ArrowUpRight,
 } from "lucide-react";
+import { getAssetPath } from "@/lib/utils";
 
 export default function ProjectCard({ project }: { project: ProjectType }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
         {/* Project Thumbnail Image */}
         <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <img
-            src={project.image}
+            src={getAssetPath(project.image)}
             alt={project.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
@@ -105,7 +106,7 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
           <div className="space-y-6 my-2">
             <div className="relative h-64 sm:h-72 w-full rounded-xl overflow-hidden bg-slate-100">
               <img
-                src={project.image}
+                src={getAssetPath(project.image)}
                 alt={project.title}
                 className="w-full h-full object-cover"
               />
