@@ -73,10 +73,10 @@ export default function ApplyPage() {
     });
   };
 
-  // Google Apps Script Web App endpoint or configured Google Sheet endpoint
+  // Official Google Apps Script Web App endpoint for IEEE PEC Google Sheet
   const GOOGLE_SCRIPT_URL =
     process.env.NEXT_PUBLIC_GOOGLE_SHEET_API_URL ||
-    "https://script.google.com/macros/s/AKfycbz_submission_endpoint/exec";
+    "https://script.google.com/macros/s/AKfycbzbyWLat9tbUQHHLEmc5_T6g4aF8BE766bWD-19KVIGEbWLIVt-rQsBBC5Mn_3oNjkhdQ/exec";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
