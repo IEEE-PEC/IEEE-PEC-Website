@@ -735,7 +735,7 @@ export default function InterviewPage() {
                 <Button
                   type="button"
                   onClick={() =>
-                    router.push("/interview-admin")
+                    router.push("/admin")
                   }
                   className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
                 >

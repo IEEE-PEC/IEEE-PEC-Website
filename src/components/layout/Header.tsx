@@ -161,7 +161,7 @@ export default function Header() {
     if (userRole === "admin") {
       items.push({
         name: "Admin",
-        href: "/interview-admin",
+        href: "/admin",
         icon: Shield,
       });
     }
@@ -302,12 +302,12 @@ export default function Header() {
 
                       {userRole === "admin" && (
                         <Link
-                          href="/interview-admin"
+                          href="/admin"
                           onClick={() => setProfileOpen(false)}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg text-foreground hover:bg-accent transition-colors"
                         >
                           <Shield className="w-4 h-4 text-purple-600" />
-                          <span>Interview Admin</span>
+                          <span>Admin Panel</span>
                         </Link>
                       )}
 

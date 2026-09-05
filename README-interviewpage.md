@@ -51,9 +51,9 @@ This document contains a comprehensive record of all features, enhancements, por
   (Select ➔ "Selected" | Hold ➔ "Hold" | Reject ➔ "Rejected")
           │
           ▼
-[ Admin Panel: /interview-admin ]
+[ Admin Panel: /admin ]
   (1. Set WhatsApp Group Link & Audition Cycle Name)
-  (2. Toggle "Declare Results" ON/OFF)
+  (2. Toggle 1-Click "Release Results" ON/OFF)
   (3. Search Selected members ➔ 1-Click "Promote to Interviewer")
           │
           ▼
@@ -72,7 +72,7 @@ This document contains a comprehensive record of all features, enhancements, por
 - Auto-detects Supabase login session.
 - Displays user profile avatar, name, and email dropdown.
 - Shows dynamic role badge:
-  - 🟣 **Admin** ➔ Direct shortcut to `/interview-admin`
+  - 🟣 **Admin** ➔ Direct shortcut to `/admin`
   - 🔵 **Interviewer** ➔ Direct shortcut to `/interview`
   - 🟡 **Pending** ➔ Direct shortcut to `/pending`
 - Reordered navigation: `Webdev Team` moved to last.
@@ -110,7 +110,7 @@ This document contains a comprehensive record of all features, enhancements, por
   - `Reject` ➔ `Rejected`
 - Instant local state update ensures zero-latency UI updates without requiring a manual browser refresh.
 
-### 6. Admin Panel with Member Promotion (`src/pages/interview-admin.tsx`)
+### 6. Admin Panel with Member Promotion & Results Control (`src/pages/admin/index.tsx`)
 - **Panel 1 — Promote Members to Interviewer:**
   - Automatically lists all candidates marked as `Selected`.
   - Live search by Name, College Email, or SID.

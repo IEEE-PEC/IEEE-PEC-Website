@@ -19,38 +19,6 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border/80 bg-slate-900 text-slate-200">
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-[#002855] via-[#00629B] to-[#004B7A] py-6 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs text-amber-300 font-semibold mb-1">
-              <Award className="w-3.5 h-3.5" />
-              <span>Outstanding Student Branch Award Winner • IEEE Chandigarh Subsection</span>
-            </div>
-            <h3 className="text-lg font-bold text-white tracking-tight">
-              Ready to innovate with IEEE PEC Student Branch?
-            </h3>
-            <p className="text-xs sm:text-sm text-blue-100/80">
-              Join active student innovators, researchers, and engineers driving breakthrough technology.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/apply"
-              className="px-5 py-2 rounded-lg bg-white text-[#002855] font-semibold text-xs sm:text-sm hover:bg-blue-50 transition-all shadow-sm"
-            >
-              Apply for Membership
-            </Link>
-            <Link
-              href="/project"
-              className="px-5 py-2 rounded-lg bg-white/10 text-white font-semibold text-xs sm:text-sm hover:bg-white/20 transition-all border border-white/20"
-            >
-              Explore Projects
-            </Link>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1: About IEEE PEC */}

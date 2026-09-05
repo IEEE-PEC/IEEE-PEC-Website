@@ -53,7 +53,7 @@ export default function AuthCallback() {
           }
 
           if (newProfile?.role === "admin") {
-            targetPath = "/interview-admin";
+            targetPath = "/admin";
           } else if (newProfile?.role === "interviewer") {
             targetPath = "/interview";
           } else {
@@ -66,7 +66,7 @@ export default function AuthCallback() {
           }
 
           if (profile.role === "admin") {
-            targetPath = "/interview-admin";
+            targetPath = "/admin";
           } else if (profile.role === "interviewer") {
             targetPath = "/interview";
           } else {

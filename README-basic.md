@@ -1,4 +1,4 @@
-﻿# IEEE PEC Student Branch Website — Complete Developer Guide
+# IEEE PEC Student Branch Website — Complete Developer Guide
 
 Welcome to the official repository for the **IEEE Student Branch at Punjab Engineering College (PEC), Chandigarh** website.
 
@@ -72,10 +72,10 @@ IEEE-PEC-Website/
 │   │   ├── chapters/           # Chapter exploration pages (CS, PES, WIE)
 │   │   ├── contact.tsx         # Contact form and branch office location
 │   │   ├── events/             # Events, workshops, and Techadroit symposiums
+│   │   ├── admin/              # Admin management and member promotion dashboard (src/pages/admin/index.tsx)
 │   │   ├── interview.tsx       # Interview evaluation portal for seniors
-│   │   ├── interview-admin.tsx # Admin management and member promotion dashboard
 │   │   ├── interview-login.tsx # Google OAuth login portal for PEC accounts
-│   │   ├── inventory/          # Component inventory catalog
+│   │   ├── inventory/          # Lab hardware & component inventory catalog (src/pages/inventory/index.tsx)
 │   │   ├── pending.tsx         # Account pending approval waiting screen
 │   │   ├── project/            # Student hardware & software projects gallery
 │   │   ├── resources/          # Technical guides, roadmaps, and cheat sheets
@@ -107,10 +107,11 @@ IEEE-PEC-Website/
 | `/resources` | **Resources** | Curated roadmaps for C++, ROS 2, Embedded Systems, Web Development, and PCB design |
 | `/team` | **Webdev Team** | Executive committee and technical leads |
 | `/contact` | **Contact Us** | Direct query submission form and branch office details |
-| `/apply` | **Apply** | Auditions form with automatic Year detection from student SID |
+| `/apply` | **Apply & Audition Portal** | Auditions form, application status, and published results |
 | `/interview-login`| **Login** | Google OAuth login for PEC students and interviewers |
 | `/interview` | **Interview Portal** | Scoring sheet and candidate pipeline for authorized interviewers |
-| `/interview-admin`| **Admin Dashboard** | Member promotion panel and role-assignment controls |
+| `/admin` | **Admin Dashboard** | Member promotion, result release toggles, and role controls |
+| `/inventory` | **Lab Inventory** | Lab hardware and electronic components management |
 
 ---
 
