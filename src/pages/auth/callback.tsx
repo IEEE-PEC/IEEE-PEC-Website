@@ -47,20 +47,30 @@ export default function AuthCallback() {
             .select("role")
             .single();
 
+          const savedRedirect = localStorage.getItem("auth_redirect");
+          if (savedRedirect) {
+            localStorage.removeItem("auth_redirect");
+          }
+
           if (newProfile?.role === "admin") {
             targetPath = "/interview-admin";
           } else if (newProfile?.role === "interviewer") {
             targetPath = "/interview";
           } else {
-            targetPath = "/pending";
+            targetPath = savedRedirect || "/apply";
           }
         } else {
+          const savedRedirect = localStorage.getItem("auth_redirect");
+          if (savedRedirect) {
+            localStorage.removeItem("auth_redirect");
+          }
+
           if (profile.role === "admin") {
             targetPath = "/interview-admin";
           } else if (profile.role === "interviewer") {
             targetPath = "/interview";
           } else {
-            targetPath = "/pending";
+            targetPath = savedRedirect || "/apply";
           }
         }
       } catch (err) {

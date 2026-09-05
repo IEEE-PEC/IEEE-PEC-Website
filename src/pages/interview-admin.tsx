@@ -6,8 +6,18 @@ import PageHead from "@/components/layout/PageHead";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Search, UserCheck } from "lucide-react";
+import {
+  Search,
+  UserCheck,
+  Sparkles,
+  Globe,
+  MessageCircle,
+  Save,
+  Loader2,
+  CheckCircle2,
+} from "lucide-react";
 
 type Role = "pending" | "interviewer" | "admin";
 
@@ -40,6 +50,12 @@ export default function InterviewAdminPage() {
   const [members, setMembers] = useState<Member[]>([]);
   const [memberSearch, setMemberSearch] = useState("");
   const [promoting, setPromoting] = useState<string | null>(null);
+
+  // Portal Audition & Results Settings
+  const [auditionEventName, setAuditionEventName] = useState("IEEE PEC Auditions 2026-2027");
+  const [resultsPublished, setResultsPublished] = useState(false);
+  const [whatsappLink, setWhatsappLink] = useState("");
+  const [savingSettings, setSavingSettings] = useState(false);
 
   /*
    * Check admin access
@@ -80,7 +96,7 @@ export default function InterviewAdminPage() {
           return;
         }
 
-        await Promise.all([loadProfiles(), loadMembers()]);
+        await Promise.all([loadProfiles(), loadMembers(), loadSettings()]);
 
         setLoading(false);
       } catch (error) {
@@ -239,6 +255,53 @@ export default function InterviewAdminPage() {
   };
 
   /*
+   * Load portal settings
+   */
+  const loadSettings = async () => {
+    try {
+      const { data, error } = await client
+        .from("portal_settings")
+        .select("*")
+        .eq("id", "main")
+        .maybeSingle();
+
+      if (data) {
+        setAuditionEventName(data.audition_event_name || "IEEE PEC Auditions 2026-2027");
+        setResultsPublished(!!data.results_published);
+        setWhatsappLink(data.whatsapp_group_link || "");
+      }
+    } catch (err) {
+      console.error("Settings load error:", err);
+    }
+  };
+
+  /*
+   * Save portal settings
+   */
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingSettings(true);
+
+    try {
+      const { error } = await client.from("portal_settings").upsert({
+        id: "main",
+        audition_event_name: auditionEventName.trim(),
+        results_published: resultsPublished,
+        whatsapp_group_link: whatsappLink.trim(),
+        updated_at: new Date().toISOString(),
+      });
+
+      if (error) throw error;
+      toast.success("Audition settings updated successfully!");
+    } catch (err: any) {
+      console.error("Save settings error:", err);
+      toast.error(err.message || "Failed to save settings.");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
+  /*
    * Logout
    */
   const handleLogout = async () => {
@@ -250,7 +313,7 @@ export default function InterviewAdminPage() {
    * Refresh all data
    */
   const refreshUsers = async () => {
-    await Promise.all([loadProfiles(), loadMembers()]);
+    await Promise.all([loadProfiles(), loadMembers(), loadSettings()]);
     toast.success("Data refreshed.");
   };
 
@@ -331,6 +394,104 @@ export default function InterviewAdminPage() {
 
         {/* Content */}
         <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+
+          {/* ── Panel 0: Audition Results & Induction Controls ── */}
+          <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b dark:border-border pb-4">
+              <div>
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#00629B]" />
+                  Audition Results &amp; Selection Release
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                  Control which event cycle is active and toggle when audition results become visible to candidates on <span className="font-semibold text-foreground">/apply</span>.
+                </p>
+              </div>
+
+              {/* Status Badge */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                  resultsPublished 
+                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300"
+                    : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300"
+                }`}>
+                  <span className={`w-2 h-2 rounded-full ${resultsPublished ? "bg-emerald-500" : "bg-amber-500 animate-pulse"}`} />
+                  {resultsPublished ? "Results Published Live" : "Results Hidden (Under Review)"}
+                </span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveSettings} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="auditionEventName" className="text-xs font-semibold">
+                    Audition Event / Cycle Name *
+                  </Label>
+                  <Input
+                    id="auditionEventName"
+                    value={auditionEventName}
+                    onChange={(e) => setAuditionEventName(e.target.value)}
+                    placeholder="e.g. IEEE PEC Auditions 2026-2027"
+                    required
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Displayed on the top badge of the /apply portal.
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="whatsappLink" className="text-xs font-semibold flex items-center gap-1.5">
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    Selected Members WhatsApp Community Group Link
+                  </Label>
+                  <Input
+                    id="whatsappLink"
+                    value={whatsappLink}
+                    onChange={(e) => setWhatsappLink(e.target.value)}
+                    placeholder="https://chat.whatsapp.com/..."
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Shown exclusively to Selected candidates upon result release.
+                  </p>
+                </div>
+              </div>
+
+              {/* Publish Toggle & Save Button */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t dark:border-border">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setResultsPublished(!resultsPublished)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                      resultsPublished ? "bg-emerald-600" : "bg-slate-300 dark:bg-slate-700"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        resultsPublished ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                  <span className="text-xs font-semibold text-foreground">
+                    {resultsPublished ? "Declare Results (Turn ON to publish to candidates)" : "Hold Results (Turn OFF to keep in review)"}
+                  </span>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={savingSettings}
+                  className="bg-[#00629B] hover:bg-[#004B7A] text-white text-xs font-semibold gap-2 shadow-sm rounded-xl px-5"
+                >
+                  {savingSettings ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Save className="w-3.5 h-3.5" />
+                  )}
+                  Save Audition Settings
+                </Button>
+              </div>
+            </form>
+          </section>
 
           {/* ── Panel 1: Promote Selected Members to Interviewer ── */}
           <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">

@@ -1,4 +1,4 @@
-﻿# IEEE PEC Website — `interview-page` Branch Documentation
+# IEEE PEC Website — `interview-page` Branch Documentation
 
 This document contains a comprehensive record of all features, enhancements, portal architecture, database integrations, and UI upgrades implemented in the `interview-page` branch of the IEEE PEC Student Branch website repository.
 
@@ -6,12 +6,16 @@ This document contains a comprehensive record of all features, enhancements, por
 
 ## 📌 Branch Purpose & Objectives
 
-1. **Streamline Student Auditions & Membership Intake:** Provide an automated, college-SID aware audition application system.
+1. **Streamline Student Auditions & Membership Intake:** Candidate logs in via official PEC Google Account (`@pec.edu.in`), pre-fills & locks verified email, and auto-detects Academic Year from SID.
 2. **Dedicated Interview Evaluation Portal:** Allow authorized seniors/interviewers to evaluate candidates across multiple scoring criteria with live statistics and real-time status updates.
-3. **Role-Based Access Control (RBAC):** Admin approval workflow distinguishing *pending applicants*, *interviewers*, and *admins*.
-4. **Member Promotion Engine:** Promote selected 1st-year candidates into interviewers for subsequent audition cycles directly from the admin panel.
-5. **Dynamic Frontend Content & Photo Management:** Enable website administrators to create, update, and delete events with direct photo uploads from their laptop to Supabase Storage without touching the codebase.
-6. **Modernized UI & Theming:** Custom *Midnight Cyber* dark mode and *Clean Minimalist* light mode with localStorage persistence.
+3. **Audition Results Release Control:** Admin panel toggle (`results_published`) to declare or hold results for a specific audition event cycle.
+4. **Candidate Result Views & WhatsApp Community:**
+   - **Selected:** Congratulatory banner with 1-click **Official WhatsApp Community Join Button** (link configured by Admin).
+   - **Hold:** Waitlist notification.
+   - **Not Selected:** Encouraging message highlighting future workshop participation.
+5. **Member Promotion Engine:** Promote selected 1st-year candidates into interviewers for subsequent audition cycles directly from the admin panel.
+6. **Dynamic Frontend Content & Photo Management:** Enable website administrators to create, update, and delete events with direct photo uploads from their laptop to Supabase Storage without touching the codebase.
+7. **Modernized UI & Theming:** Custom *Midnight Cyber* dark mode and *Clean Minimalist* light mode with localStorage persistence.
 
 ---
 
@@ -19,6 +23,9 @@ This document contains a comprehensive record of all features, enhancements, por
 
 ```
                [ 1st / 2nd Year Candidate ]
+                            │
+                            ▼
+              [ Google Sign In (@pec.edu.in) ]
                             │
                             ▼
                [ Apply Page: /apply ] 
@@ -45,10 +52,16 @@ This document contains a comprehensive record of all features, enhancements, por
           │
           ▼
 [ Admin Panel: /interview-admin ]
-  (Search Selected members ➔ 1-Click "Promote to Interviewer")
+  (1. Set WhatsApp Group Link & Audition Cycle Name)
+  (2. Toggle "Declare Results" ON/OFF)
+  (3. Search Selected members ➔ 1-Click "Promote to Interviewer")
           │
           ▼
-[ Next Cycle: Promoted Member becomes Interviewer! ]
+[ Candidate Checks /apply ]
+  ├─ If Results OFF ➔ "Auditions in Progress / Under Review"
+  ├─ If Selected    ➔ 🎉 Selected Banner + WhatsApp Join Button
+  ├─ If Hold        ➔ ⏳ On Hold / Waitlist
+  └─ If Not Selected➔ 🤝 Thank you message & workshop invite
 ```
 
 ---
