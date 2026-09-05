@@ -1,5 +1,6 @@
-"use client";
+﻿"use client";
 
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import PageHead from "@/components/layout/PageHead";
 import Hero from "@/components/Hero";
@@ -7,24 +8,77 @@ import StatsSection from "@/components/StatsSection";
 import ChaptersSection from "@/components/ChaptersSection";
 import ProjectCard from "@/components/ProjectCard";
 import EventCard from "@/components/EventCard";
+import EditEventDialog from "@/components/EditEventDialog";
 import { projectsData } from "@/data/projects_data";
 import { eventsData } from "@/data/events_data";
+import { useAdmin } from "@/hooks/useAdmin";
+import { client } from "@/lib/supabase/supabase";
+import { EventType } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Sparkles,
   Award,
-  Layers,
-  FolderGit2,
-  Calendar,
-  Zap,
   CheckCircle2,
 } from "lucide-react";
 import { getAssetPath } from "@/lib/utils";
 
 export default function Home() {
   const featuredProjects = projectsData.slice(0, 3);
-  const featuredEvents = eventsData.slice(0, 3);
+  const [events, setEvents] = useState<EventType[]>(eventsData);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+  const { isAdmin } = useAdmin();
+
+  const loadEvents = useCallback(async () => {
+    try {
+      const { data, error } = await client
+        .from("events")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Supabase events load error:", error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const mappedEvents: EventType[] = data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          category: item.category,
+          description: item.description,
+          longDescription: item.long_description,
+          capacity: item.capacity,
+          image: item.image_url,
+          registrationOpen: item.registration_open,
+        }));
+
+        const supabaseIds = new Set(mappedEvents.map((e) => e.id));
+        const nonDuplicateStatic = eventsData.filter(
+          (e) => !supabaseIds.has(e.id)
+        );
+
+        setEvents([...mappedEvents, ...nonDuplicateStatic]);
+      } else {
+        setEvents(eventsData);
+      }
+    } catch (err) {
+      console.error("Events fetch error:", err);
+      setEvents(eventsData);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadEvents();
+  }, [loadEvents]);
+
+  const featuredEvents = events.slice(0, 3);
+
+  const handleEditEvent = (ev: EventType) => {
+    setSelectedEvent(ev);
+    setEditDialogOpen(true);
+  };
 
   return (
     <>
@@ -186,38 +240,24 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard
+                key={event.id}
+                event={event}
+                isAdmin={isAdmin}
+                onEdit={handleEditEvent}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Call to Action: Join IEEE */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-t border-border/60">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#002855] via-[#00629B] to-[#00A3E0] flex items-center justify-center text-white mx-auto shadow-xl">
-            <Sparkles className="w-7 h-7" />
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
-            Ready to Build Your Engineering Legacy?
-          </h2>
-          <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Auditions are open for prospective members across all engineering branches at Punjab Engineering College. Join IEEE PEC Student Branch to participate in C++ coding sprints, bot-making workshops, and regional technical symposiums.
-          </p>
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <Button asChild size="lg" className="bg-[#00629B] hover:bg-[#004B7A] text-white rounded-xl px-8 py-6 text-base font-semibold shadow-lg">
-              <Link href="/apply">
-                Apply for Auditions & Membership
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-border rounded-xl px-8 py-6 text-base font-semibold">
-              <Link href="/contact">
-                Contact Executive Team
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Edit Event Modal */}
+      <EditEventDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        event={selectedEvent}
+        onSuccess={loadEvents}
+      />
     </>
   );
 }

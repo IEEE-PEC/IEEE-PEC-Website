@@ -297,6 +297,17 @@ export default function InterviewAdminPage() {
                 type="button"
                 variant="outline"
                 onClick={() =>
+                  router.push("/events")
+                }
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
+              >
+                Manage Events
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
                   router.push("/interview")
                 }
                 className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"

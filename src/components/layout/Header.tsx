@@ -31,11 +31,11 @@ type Role = "pending" | "interviewer" | "admin";
 const baseNavigation = [
   { name: "Home", href: "/", icon: Sparkles },
   { name: "Chapters", href: "/chapters", icon: Layers },
-  { name: "Team", href: "/team", icon: Users },
   { name: "Projects", href: "/project", icon: FolderGit2 },
   { name: "Events", href: "/events", icon: Calendar },
   { name: "Resources", href: "/resources", icon: BookOpen },
   { name: "Contact", href: "/contact", icon: Send },
+  { name: "Webdev Team", href: "/team", icon: Users },
 ];
 
 export default function Header() {
@@ -243,16 +243,7 @@ export default function Header() {
               <Link href="/apply">Join IEEE</Link>
             </Button>
 
-            {!user ? (
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="hidden sm:inline-flex text-xs font-medium rounded-xl border-border hover:bg-accent"
-              >
-                <Link href="/interview-login">Member Login</Link>
-              </Button>
-            ) : (
+            {user && (
               <Popover open={profileOpen} onOpenChange={setProfileOpen}>
                 <PopoverTrigger asChild>
                   <button
@@ -386,7 +377,7 @@ export default function Header() {
                     <span className="text-sm text-muted-foreground">Theme</span>
                     <ThemeToggle />
                   </div>
-                  {user ? (
+                  {user && (
                     <div className="space-y-2">
                       <div className="text-xs text-muted-foreground px-1 truncate">
                         Signed in as <span className="font-semibold text-foreground">{user.email}</span>
@@ -399,16 +390,6 @@ export default function Header() {
                         Sign Out
                       </Button>
                     </div>
-                  ) : (
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="w-full text-xs rounded-xl border-border"
-                    >
-                      <Link href="/interview-login" onClick={() => setMobileMenuOpen(false)}>
-                        Member Login
-                      </Link>
-                    </Button>
                   )}
 
                   <Button asChild className="w-full bg-[#00629B] hover:bg-[#004B7A] text-white rounded-xl">

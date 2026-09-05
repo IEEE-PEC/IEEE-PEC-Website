@@ -201,7 +201,7 @@ export default function ContactPage() {
                         <Input
                           id="name"
                           required
-                          placeholder="e.g. Shashwat Mishra"
+                          placeholder="Your full name"
                           value={form.name}
                           onChange={(e) => setForm({ ...form, name: e.target.value })}
                           className="h-10 text-xs rounded-xl"
@@ -213,7 +213,7 @@ export default function ContactPage() {
                           id="email"
                           type="email"
                           required
-                          placeholder="your.email@pec.edu.in"
+                          placeholder="your@email.com"
                           value={form.email}
                           onChange={(e) => setForm({ ...form, email: e.target.value })}
                           className="h-10 text-xs rounded-xl"
@@ -226,7 +226,7 @@ export default function ContactPage() {
                       <Input
                         id="subject"
                         required
-                        placeholder="e.g. Workshop inquiry / Student branch partnership"
+                        placeholder="Subject"
                         value={form.subject}
                         onChange={(e) => setForm({ ...form, subject: e.target.value })}
                         className="h-10 text-xs rounded-xl"
@@ -239,7 +239,7 @@ export default function ContactPage() {
                         id="message"
                         required
                         rows={5}
-                        placeholder="Write your query or message here..."
+                        placeholder="Your message..."
                         value={form.message}
                         onChange={(e) => setForm({ ...form, message: e.target.value })}
                         className="text-xs rounded-xl resize-none"

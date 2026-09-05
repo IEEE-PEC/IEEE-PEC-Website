@@ -269,7 +269,7 @@ export default function ApplyPage() {
                       <Input
                         id="fullName"
                         required
-                        placeholder="e.g. Aryan Mahendru"
+                        placeholder="Full name"
                         value={formData.fullName}
                         onChange={(e) =>
                           setFormData({
@@ -289,7 +289,7 @@ export default function ApplyPage() {
                       <Input
                         id="sid"
                         required
-                        placeholder="e.g. 25103045"
+                        placeholder="Student ID (e.g. 25103045)"
                         value={formData.sid}
                         onChange={(e) =>
                           handleSidChange(e.target.value)
@@ -309,7 +309,7 @@ export default function ApplyPage() {
                         id="email"
                         type="email"
                         required
-                        placeholder="e.g. aryan.cse21@pec.edu.in"
+                        placeholder="College Email ID"
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({
@@ -329,7 +329,7 @@ export default function ApplyPage() {
                       <Input
                         id="phone"
                         required
-                        placeholder="e.g. +91 9876543210"
+                        placeholder="Phone Number"
                         value={formData.phone}
                         onChange={(e) =>
                           setFormData({
@@ -351,7 +351,7 @@ export default function ApplyPage() {
                       <Input
                         id="branch"
                         required
-                        placeholder="e.g. CSE / ECE / EE / ME"
+                        placeholder="Department / Branch"
                         value={formData.branch}
                         onChange={(e) =>
                           setFormData({

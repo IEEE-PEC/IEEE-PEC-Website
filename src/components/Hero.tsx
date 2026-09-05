@@ -18,7 +18,7 @@ const heroSlides = [
     badge: "Outstanding Student Branch • IEEE Chandigarh Subsection",
     heading: "Innovate. Code. Build with IEEE PEC.",
     description:
-      "One of the largest and strongest technical societies at Punjab Engineering College. We foster hands-on learning in C++, Arduino, robotics bot making, and competitive software development through our PES, CS, and WIE chapters.",
+      "One of the largest technical societies at PEC — fostering hands-on learning in robotics, C++, and competitive engineering.",
     cta1: "Explore Projects",
     cta1Link: "/project",
     cta2: "Our 3 Chapters",
@@ -29,8 +29,8 @@ const heroSlides = [
     badge: "Hardware & Robotics Workshops",
     heading: "Robo-Soccer, Combat Bots & Circuit Design",
     description:
-      "From 1kg & 3kg competitive Robo-Soccer chassis and RC Hovercrafts to PCB layout in EasyEDA and TinkerCAD, get practical engineering experience with our active technical team.",
-    cta1: "View Events & Workshops",
+      "From competitive Robo-Soccer and RC Hovercrafts to PCB design in EasyEDA — real engineering, hands-on.",
+    cta1: "View Events",
     cta1Link: "/events",
     cta2: "Meet Our Team",
     cta2Link: "/team",
@@ -40,9 +40,9 @@ const heroSlides = [
     badge: "Techadroit Flagship Symposium",
     heading: "Competitive Coding & Expert Tech Sessions",
     description:
-      "Participate in coding competitions on HackerRank, AI/ML study tracks, Bug-Busters debugging sprints, and flagship inter-college championships.",
-    cta1: "Apply for Auditions",
-    cta1Link: "/apply",
+      "HackerRank challenges, AI/ML tracks, Bug-Busters sprints, and inter-college championships — all under one roof.",
+    cta1: "Explore Events",
+    cta1Link: "/events",
     cta2: "Technical Resources",
     cta2Link: "/resources",
   },
