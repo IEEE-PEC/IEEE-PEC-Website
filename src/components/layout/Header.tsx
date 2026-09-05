@@ -24,6 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { client } from "@/lib/supabase/supabase";
 import { getAssetPath } from "@/lib/utils";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 type Role = "pending" | "interviewer" | "admin";
 
@@ -233,6 +234,7 @@ export default function Header() {
 
           {/* Right Actions: Join IEEE CTA + Member Login / Profile Avatar */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <Button
               asChild
               size="sm"
@@ -380,6 +382,10 @@ export default function Header() {
                 </div>
 
                 <div className="pt-6 border-t border-border space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Theme</span>
+                    <ThemeToggle />
+                  </div>
                   {user ? (
                     <div className="space-y-2">
                       <div className="text-xs text-muted-foreground px-1 truncate">

@@ -632,8 +632,8 @@ export default function InterviewPage() {
       <>
         <PageHead title="Interview Portal" />
 
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <p className="text-gray-500">
+        <main className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center">
+          <p className="text-gray-500 dark:text-muted-foreground">
             Checking access...
           </p>
         </main>
@@ -649,9 +649,9 @@ export default function InterviewPage() {
       <>
         <PageHead title="Interview Portal" />
 
-        <main className="min-h-screen bg-gray-50">
+        <main className="min-h-screen bg-gray-50 dark:bg-background">
 
-          <section className="bg-[#062b52] text-white py-10">
+          <section className="bg-[#062b52] dark:bg-[#0a1628] text-white py-10">
             <div className="max-w-6xl mx-auto px-6">
 
               <h1 className="text-3xl font-bold">
@@ -666,7 +666,7 @@ export default function InterviewPage() {
           </section>
 
           <div className="flex justify-center py-20">
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-muted-foreground">
               Loading applicants...
             </p>
           </div>
@@ -680,10 +680,10 @@ export default function InterviewPage() {
     <>
       <PageHead title="Interview Portal" />
 
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 dark:bg-background">
 
         {/* Header */}
-        <section className="bg-[#062b52] text-white py-10">
+        <section className="bg-[#062b52] dark:bg-[#0a1628] text-white py-10">
 
           <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
 
@@ -705,7 +705,7 @@ export default function InterviewPage() {
                   onClick={() =>
                     router.push("/interview-admin")
                   }
-                  className="bg-white text-black hover:bg-gray-100"
+                  className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
                 >
                   Admin Panel
                 </Button>
@@ -715,7 +715,7 @@ export default function InterviewPage() {
                 type="button"
                 variant="outline"
                 onClick={handleLogout}
-                className="bg-white text-black hover:bg-gray-100"
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
               >
                 Logout
               </Button>
@@ -730,7 +730,7 @@ export default function InterviewPage() {
 
           {/* Evaluation */}
           {selectedApplicant && (
-            <section className="bg-white border rounded-xl shadow-sm p-6 mb-8">
+            <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6 mb-8">
 
               <div className="flex items-center justify-between mb-6">
 
@@ -758,7 +758,7 @@ export default function InterviewPage() {
               </div>
 
               {/* Applicant information */}
-              <div className="bg-gray-50 border rounded-lg p-5 mb-6">
+              <div className="bg-gray-50 dark:bg-secondary border dark:border-border rounded-lg p-5 mb-6">
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
@@ -924,7 +924,7 @@ export default function InterviewPage() {
                 </div>
 
                 {/* Overall score */}
-                <div className="mt-6 p-5 bg-gray-50 border rounded-lg">
+                <div className="mt-6 p-5 bg-gray-50 dark:bg-secondary border dark:border-border rounded-lg">
 
                   <p className="text-sm text-gray-500">
                     Overall Score
@@ -1039,7 +1039,7 @@ export default function InterviewPage() {
               </div>
 
               {/* Filters Box */}
-              <div className="bg-white border rounded-xl shadow-sm p-5 mb-6 space-y-4">
+              <div className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-5 mb-6 space-y-4">
                 {/* Search */}
                 <div className="relative">
                   <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -1107,10 +1107,10 @@ export default function InterviewPage() {
 
               {/* Applicant Cards */}
               {filteredApplications.length === 0 ? (
-                <div className="bg-white border rounded-xl p-12 text-center shadow-sm">
-                  <AlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-                  <h3 className="font-semibold text-lg text-gray-900">No applicants found</h3>
-                  <p className="text-gray-500 mt-1 text-sm">
+                <div className="bg-white dark:bg-card border dark:border-border rounded-xl p-12 text-center shadow-sm">
+                  <AlertCircle className="w-8 h-8 text-gray-400 dark:text-muted-foreground mx-auto mb-3" />
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-foreground">No applicants found</h3>
+                  <p className="text-gray-500 dark:text-muted-foreground mt-1 text-sm">
                     No candidates match the active search and filter combination.
                   </p>
                   {(yearFilter !== "All" || statusFilter !== "All" || search) && (
@@ -1136,21 +1136,21 @@ export default function InterviewPage() {
                     return (
                       <div
                         key={application.id}
-                        className="bg-white border rounded-xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition-shadow"
+                        className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition-shadow"
                       >
                         <div>
                           {/* Card Header: Name + Year & Status Badges */}
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <h3 className="text-lg font-bold text-gray-900">
+                              <h3 className="text-lg font-bold text-gray-900 dark:text-foreground">
                                 {application.full_name}
                               </h3>
-                              <p className="text-xs font-mono text-gray-500 mt-0.5">
+                              <p className="text-xs font-mono text-gray-500 dark:text-muted-foreground mt-0.5">
                                 SID: {application.sid}
                               </p>
                             </div>
 
-                            <span className="text-xs font-semibold bg-gray-100 text-gray-700 rounded-full px-3 py-1 border border-gray-200 whitespace-nowrap">
+                            <span className="text-xs font-semibold bg-gray-100 dark:bg-secondary text-gray-700 dark:text-secondary-foreground rounded-full px-3 py-1 border border-gray-200 dark:border-border whitespace-nowrap">
                               {application.year}
                             </span>
                           </div>
@@ -1221,7 +1221,7 @@ export default function InterviewPage() {
                               </p>
                             )}
                             {ev?.comments && (
-                              <p className="mt-2 p-2 bg-gray-50 rounded border border-gray-100 text-[11px] text-gray-700 italic">
+                              <p className="mt-2 p-2 bg-gray-50 dark:bg-secondary rounded border border-gray-100 dark:border-border text-[11px] text-gray-700 dark:text-muted-foreground italic">
                                 &ldquo;{ev.comments}&rdquo;
                               </p>
                             )}

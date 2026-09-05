@@ -32,13 +32,13 @@ export default function InterviewLogin() {
     <>
       <PageHead title="Interviewer Login" />
 
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="w-full max-w-md bg-white border rounded-xl shadow-sm p-8 text-center">
+      <main className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center px-4">
+        <div className="w-full max-w-md bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-8 text-center">
           <h1 className="text-2xl font-bold mb-2">
             IEEE PEC Interview Portal
           </h1>
 
-          <p className="text-gray-500 mb-8">
+          <p className="text-gray-500 dark:text-muted-foreground mb-8">
             Sign in using your PEC Google account.
           </p>
 
@@ -51,7 +51,7 @@ export default function InterviewLogin() {
             {loading ? "Redirecting..." : "Continue with Google"}
           </Button>
 
-          <p className="text-xs text-gray-400 mt-5">
+          <p className="text-xs text-gray-400 dark:text-muted-foreground mt-5">
             Only @pec.edu.in accounts are allowed.
           </p>
         </div>

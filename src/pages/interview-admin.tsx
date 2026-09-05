@@ -175,8 +175,8 @@ export default function InterviewAdminPage() {
       <>
         <PageHead title="Interview Admin Panel" />
 
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <p className="text-gray-500">
+        <main className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center">
+          <p className="text-gray-500 dark:text-muted-foreground">
             Loading interview admin panel...
           </p>
         </main>
@@ -188,10 +188,10 @@ export default function InterviewAdminPage() {
     <>
       <PageHead title="Interview Admin Panel" />
 
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 dark:bg-background">
 
         {/* Header */}
-        <section className="bg-[#062b52] text-white py-10">
+        <section className="bg-[#062b52] dark:bg-[#0a1628] text-white py-10">
           <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
 
             <div>
@@ -199,7 +199,7 @@ export default function InterviewAdminPage() {
                 Interview Admin Panel
               </h1>
 
-              <p className="mt-2 text-gray-200">
+              <p className="mt-2 text-gray-200 dark:text-gray-300">
                 Manage IEEE PEC interview portal users & roles.
               </p>
             </div>
@@ -212,7 +212,7 @@ export default function InterviewAdminPage() {
                 onClick={() =>
                   router.push("/interview")
                 }
-                className="bg-white text-black hover:bg-gray-100"
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
               >
                 Interview Portal
               </Button>
@@ -221,7 +221,7 @@ export default function InterviewAdminPage() {
                 type="button"
                 variant="outline"
                 onClick={handleLogout}
-                className="bg-white text-black hover:bg-gray-100"
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
               >
                 Logout
               </Button>
@@ -234,7 +234,7 @@ export default function InterviewAdminPage() {
         {/* Content */}
         <div className="max-w-6xl mx-auto px-6 py-10">
 
-          <section className="bg-white border rounded-xl shadow-sm p-6">
+          <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
 
             <div className="flex items-center justify-between mb-6">
 
@@ -243,7 +243,7 @@ export default function InterviewAdminPage() {
                   User Management
                 </h2>
 
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
                   Approve PEC users and assign their roles.
                 </p>
               </div>
@@ -259,7 +259,7 @@ export default function InterviewAdminPage() {
             </div>
 
             {profiles.length === 0 ? (
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-muted-foreground">
                 No users found.
               </p>
             ) : (
