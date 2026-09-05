@@ -67,6 +67,12 @@ export default function Header() {
 
         if (isMounted) {
           setUser(session.user);
+          const immediateName =
+            session.user.user_metadata?.full_name ||
+            session.user.user_metadata?.name ||
+            session.user.email?.split("@")[0] ||
+            null;
+          setFullName(immediateName);
         }
 
         const { data: profile } = await client
@@ -77,7 +83,9 @@ export default function Header() {
 
         if (isMounted && profile) {
           setUserRole(profile.role);
-          setFullName(profile.full_name || session.user.user_metadata?.full_name || null);
+          if (profile.full_name) {
+            setFullName(profile.full_name);
+          }
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
@@ -100,6 +108,12 @@ export default function Header() {
 
       if (isMounted) {
         setUser(session.user);
+        const immediateName =
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          session.user.email?.split("@")[0] ||
+          null;
+        setFullName(immediateName);
       }
 
       const { data: profile } = await client
@@ -110,7 +124,9 @@ export default function Header() {
 
       if (isMounted && profile) {
         setUserRole(profile.role);
-        setFullName(profile.full_name || session.user.user_metadata?.full_name || null);
+        if (profile.full_name) {
+          setFullName(profile.full_name);
+        }
       }
     });
 
@@ -126,7 +142,7 @@ export default function Header() {
     setUser(null);
     setUserRole(null);
     setFullName(null);
-    router.push("/");
+    window.location.href = "/";
   };
 
   // Build navigation items dynamically based on role
@@ -154,10 +170,15 @@ export default function Header() {
 
   // Initials for avatar fallback
   const initials = useMemo(() => {
-    const name = fullName || user?.email || "U";
+    const name =
+      fullName ||
+      user?.user_metadata?.full_name ||
+      user?.user_metadata?.name ||
+      user?.email ||
+      "U";
     return name
       .split(" ")
-      .map((part) => part[0])
+      .map((part: string) => part[0])
       .join("")
       .substring(0, 2)
       .toUpperCase();
