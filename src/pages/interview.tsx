@@ -40,6 +40,7 @@ type Application = {
   github_url: string | null;
   portfolio_url: string | null;
   motivation: string | null;
+  status: string;
   created_at: string;
 };
 
@@ -588,9 +589,8 @@ export default function InterviewPage() {
         comments: newEvaluation.comments,
       });
 
-    setSubmitting(false);
-
     if (error) {
+      setSubmitting(false);
       console.error(
         "Interview submission error:",
         error
@@ -603,13 +603,45 @@ export default function InterviewPage() {
       return;
     }
 
+    /*
+     * Map recommendation → application status and update applications table
+     */
+    const statusMap: Record<string, string> = {
+      Select: "Selected",
+      Hold: "Hold",
+      Reject: "Rejected",
+    };
+    const newStatus = statusMap[recommendation] ?? "Pending";
+
+    const { error: statusError } = await client
+      .from("applications")
+      .update({ status: newStatus })
+      .eq("id", selectedApplicant.id);
+
+    setSubmitting(false);
+
+    if (statusError) {
+      console.error("Application status update error:", statusError);
+      // Non-fatal — evaluation is saved, just status sync failed
+      toast.warning("Evaluation saved, but status sync failed. Refresh to retry.");
+    } else {
+      // Update local applications state so UI reflects instantly
+      setApplications((prev) =>
+        prev.map((app) =>
+          app.id === selectedApplicant.id
+            ? { ...app, status: newStatus }
+            : app
+        )
+      );
+    }
+
     setEvaluations((prev) => ({
       ...prev,
       [selectedApplicant.id]: newEvaluation,
     }));
 
     toast.success(
-      "Interview evaluation saved successfully."
+      `Evaluation saved — ${selectedApplicant.full_name} marked as ${newStatus}.`
     );
 
     closeEvaluation();
