@@ -51,6 +51,10 @@ export default function InterviewAdminPage() {
   const [memberSearch, setMemberSearch] = useState("");
   const [promoting, setPromoting] = useState<string | null>(null);
 
+  // Portal users search & filter
+  const [userSearch, setUserSearch] = useState("");
+  const [userRoleFilter, setUserRoleFilter] = useState<"all" | Role>("all");
+
   // Portal Audition & Results Settings
   const [auditionEventName, setAuditionEventName] = useState("IEEE PEC Auditions 2026-2027");
   const [resultsPublished, setResultsPublished] = useState(false);
@@ -220,6 +224,24 @@ export default function InterviewAdminPage() {
         m.sid.toLowerCase().includes(q)
     );
   }, [members, memberSearch]);
+
+  /*
+   * Filtered portal users list based on search and role filter
+   */
+  const filteredProfiles = useMemo(() => {
+    return profiles.filter((p) => {
+      const q = userSearch.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        (p.full_name?.toLowerCase().includes(q) ?? false) ||
+        (p.email?.toLowerCase().includes(q) ?? false);
+
+      const matchesRole =
+        userRoleFilter === "all" || p.role === userRoleFilter;
+
+      return matchesSearch && matchesRole;
+    });
+  }, [profiles, userSearch, userRoleFilter]);
 
   /*
    * Update user role
@@ -638,7 +660,7 @@ export default function InterviewAdminPage() {
           {/* ── Panel 2: Portal User Management ── */}
           <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
                 <h2 className="text-xl font-bold">Portal User Management</h2>
                 <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
@@ -648,15 +670,50 @@ export default function InterviewAdminPage() {
               <Button
                 type="button"
                 variant="outline"
+                size="sm"
                 onClick={refreshUsers}
               >
                 Refresh All
               </Button>
             </div>
 
+            {/* Search & Role Filters */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 my-4">
+              <div className="relative flex-grow">
+                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Input
+                  placeholder="Search users by name or email..."
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                {(["all", "pending", "interviewer", "admin"] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setUserRoleFilter(r)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap ${
+                      userRoleFilter === r
+                        ? "bg-[#00629B] text-white shadow-sm"
+                        : "bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {profiles.length === 0 ? (
-              <p className="text-gray-500 dark:text-muted-foreground">
+              <p className="text-gray-500 dark:text-muted-foreground text-sm">
                 No users found.
+              </p>
+            ) : filteredProfiles.length === 0 ? (
+              <p className="text-gray-500 dark:text-muted-foreground text-sm">
+                No users match your search or filter.
               </p>
             ) : (
               <div className="overflow-x-auto">
@@ -670,7 +727,7 @@ export default function InterviewAdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {profiles.map((profile) => (
+                    {filteredProfiles.map((profile) => (
                       <tr key={profile.id} className="border-b dark:border-border last:border-0">
                         <td className="py-4 pr-4 font-medium">
                           {profile.full_name || "Unknown"}
