@@ -45,7 +45,7 @@ export default function AuthCallback() {
 
       // Admin
       if (profile.role === "admin") {
-        router.replace("/admin");
+        router.replace("/interview-admin");
         return;
       }
 

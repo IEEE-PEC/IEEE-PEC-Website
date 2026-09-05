@@ -17,7 +17,7 @@ type Profile = {
   created_at: string;
 };
 
-export default function AdminPage() {
+export default function InterviewAdminPage() {
   const router = useRouter();
 
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -173,11 +173,11 @@ export default function AdminPage() {
   if (loading) {
     return (
       <>
-        <PageHead title="Admin Panel" />
+        <PageHead title="Interview Admin Panel" />
 
         <main className="min-h-screen bg-gray-50 flex items-center justify-center">
           <p className="text-gray-500">
-            Loading admin panel...
+            Loading interview admin panel...
           </p>
         </main>
       </>
@@ -186,7 +186,7 @@ export default function AdminPage() {
 
   return (
     <>
-      <PageHead title="Admin Panel" />
+      <PageHead title="Interview Admin Panel" />
 
       <main className="min-h-screen bg-gray-50">
 
@@ -196,11 +196,11 @@ export default function AdminPage() {
 
             <div>
               <h1 className="text-3xl font-bold">
-                Admin Panel
+                Interview Admin Panel
               </h1>
 
               <p className="mt-2 text-gray-200">
-                Manage IEEE PEC interview portal users.
+                Manage IEEE PEC interview portal users & roles.
               </p>
             </div>
 
