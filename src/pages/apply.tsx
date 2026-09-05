@@ -75,6 +75,26 @@ export default function ApplyPage() {
     });
   };
 
+  const handleSidChange = (sidValue: string) => {
+    let autoYear = formData.year;
+    const cleanSid = sidValue.trim();
+    if (cleanSid.length >= 2) {
+      const prefix = cleanSid.substring(0, 2);
+      if (prefix === "25") {
+        autoYear = "1st Year";
+      } else if (prefix === "24") {
+        autoYear = "2nd Year";
+      } else if (prefix === "23") {
+        autoYear = "3rd Year";
+      }
+    }
+    setFormData((prev) => ({
+      ...prev,
+      sid: sidValue,
+      year: autoYear,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -269,13 +289,10 @@ export default function ApplyPage() {
                       <Input
                         id="sid"
                         required
-                        placeholder="e.g. 21103045"
+                        placeholder="e.g. 25103045"
                         value={formData.sid}
                         onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            sid: e.target.value,
-                          })
+                          handleSidChange(e.target.value)
                         }
                         className="h-10 text-xs"
                       />
