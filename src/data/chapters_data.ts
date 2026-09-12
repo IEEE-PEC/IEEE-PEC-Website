@@ -33,7 +33,7 @@ export const chaptersData: ChapterDetails[] = [
     description: "The Computer Society (CS) Chapter focuses heavily on the intersection of software engineering, competitive programming, and artificial intelligence. By hosting intensive hackathons, coding sprints on HackerRank, and hands-on workshops in C++, OOPs, algorithm design, and Machine Learning, the chapter provides a platform for members to transition from classroom theory to building functional, real-world software prototypes.",
     icon: "Code",
     color: "#2563EB",
-    logoImage: "/images/logos/cs-logo.jpeg",
+    logoImage: "/images/logos/cs-logo.png",
     bannerImage: "/images/chapters/cs-banner.png",
     stats: {
       members: "100+",
@@ -57,7 +57,7 @@ export const chaptersData: ChapterDetails[] = [
     description: "The Women in Engineering (WIE) Affinity Group is dedicated to fostering inclusivity, leadership, and technical excellence among female engineers. Through a robust peer-to-peer mentorship network, the chapter ensures that students have the support and professional guidance needed to navigate their academic and career journeys. Their impact extends via 'Girls in Tech' outreach programs, technical workshops, and leadership seminars.",
     icon: "HeartHandshake",
     color: "#DB2777",
-    logoImage: "/images/logos/wie-logo.png",
+    logoImage: "/images/logos/wie-logo.jpeg",
     bannerImage: "/images/chapters/wie-banner.jpeg",
     stats: {
       members: "80+",
