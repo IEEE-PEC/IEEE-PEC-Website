@@ -1,40 +1,50 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import PageHead from "@/components/layout/PageHead";
 import TeamMemberCard from "@/components/TeamMemberCard";
+import EditTeamMemberDialog from "@/components/EditTeamMemberDialog";
 import { teamMembersData } from "@/data/team_details";
 import { TeamMember } from "@/types";
 import { client } from "@/lib/supabase/supabase";
-import { ShieldCheck, Users, Code, Cpu, Award } from "lucide-react";
+import { useAdmin } from "@/hooks/useAdmin";
+import { Button } from "@/components/ui/button";
+import { ShieldCheck, UserPlus, Sparkles } from "lucide-react";
 
 export default function TeamPage() {
   const [members, setMembers] = useState<TeamMember[]>(teamMembersData);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+
+  const { isAdmin } = useAdmin();
+
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      const { data, error } = await client
+        .from("team_members")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const supabaseIds = new Set(data.map((m: any) => m.id));
+        const combined = [
+          ...data,
+          ...teamMembersData.filter((m) => !supabaseIds.has(m.id)),
+        ];
+        setMembers(combined);
+      } else {
+        setMembers(teamMembersData);
+      }
+    } catch (err) {
+      console.warn("Could not fetch team members from database, using static fallback.", err);
+      setMembers(teamMembersData);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const { data, error } = await client
-          .from("team_members")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (!error && data && data.length > 0) {
-          const supabaseIds = new Set(data.map((m: any) => m.id));
-          const combined = [
-            ...data,
-            ...teamMembersData.filter((m) => !supabaseIds.has(m.id)),
-          ];
-          setMembers(combined);
-        }
-      } catch (err) {
-        console.warn("Could not fetch team members from database, using static fallback.", err);
-      }
-    };
-
     fetchTeamMembers();
-  }, []);
+  }, [fetchTeamMembers]);
 
   const filteredMembers = useMemo(() => {
     if (activeCategory === "all") return members;
@@ -50,6 +60,16 @@ export default function TeamPage() {
     { id: "hardware", label: "Hardware & Bots" },
   ];
 
+  const handleAddMember = () => {
+    setEditingMember(null);
+    setIsDialogOpen(true);
+  };
+
+  const handleEditMember = (member: TeamMember) => {
+    setEditingMember(member);
+    setIsDialogOpen(true);
+  };
+
   return (
     <>
       <PageHead
@@ -64,12 +84,27 @@ export default function TeamPage() {
             <ShieldCheck className="w-3.5 h-3.5" />
             Executive Committee 2026 – 2027
           </div>
+
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
             Meet the IEEE PEC Leadership
           </h1>
           <p className="max-w-2xl mx-auto text-base text-slate-300 leading-relaxed">
             The visionary leadership, technical mentors, WebDev team, and student executives steering the IEEE PEC Student Branch for the 2026–2027 term.
           </p>
+
+          {/* Admin Action Button */}
+          {isAdmin && (
+            <div className="pt-2">
+              <Button
+                type="button"
+                onClick={handleAddMember}
+                className="bg-[#00A3E0] hover:bg-[#0082B3] text-slate-950 font-bold text-xs rounded-xl px-5 py-2.5 shadow-lg gap-2"
+              >
+                <UserPlus className="w-4 h-4" />
+                + Add Member to WebDev Team
+              </Button>
+            </div>
+          )}
 
           {/* Category Filter Pills */}
           <div className="pt-6 flex flex-wrap items-center justify-center gap-2">
@@ -102,12 +137,25 @@ export default function TeamPage() {
             /* Members Grid */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
               {filteredMembers.map((member) => (
-                <TeamMemberCard key={member.id} member={member} />
+                <TeamMemberCard
+                  key={member.id}
+                  member={member}
+                  isAdmin={isAdmin}
+                  onEdit={() => handleEditMember(member)}
+                />
               ))}
             </div>
           )}
         </div>
       </section>
+
+      {/* Admin Dialog for adding / editing team members */}
+      <EditTeamMemberDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        member={editingMember}
+        onSuccess={fetchTeamMembers}
+      />
     </>
   );
 }

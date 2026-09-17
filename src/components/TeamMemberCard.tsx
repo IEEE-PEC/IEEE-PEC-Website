@@ -3,9 +3,20 @@
 import { useState } from "react";
 import { TeamMember } from "@/types";
 import { getAssetPath } from "@/lib/utils";
-import { Github, Linkedin, Mail, Globe } from "lucide-react";
+import { Github, Linkedin, Mail, Globe, Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function TeamMemberCard({ member }: { member: TeamMember }) {
+interface TeamMemberCardProps {
+  member: TeamMember;
+  onEdit?: () => void;
+  isAdmin?: boolean;
+}
+
+export default function TeamMemberCard({
+  member,
+  onEdit,
+  isAdmin = false,
+}: TeamMemberCardProps) {
   const [imageErr, setImageErr] = useState(false);
 
   // Generate initials for generic placeholder
@@ -25,9 +36,28 @@ export default function TeamMemberCard({ member }: { member: TeamMember }) {
 
   return (
     <div className="group relative rounded-2xl border border-border/80 bg-white dark:bg-slate-900 p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:border-[#00629B]/50 flex flex-col justify-between overflow-hidden">
+      
+      {/* Admin Edit Button Floating Top Right */}
+      {(onEdit || isAdmin) && (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit?.();
+          }}
+          className="absolute top-4 right-4 z-10 text-xs gap-1.5 font-semibold bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-border shadow-sm hover:bg-[#00629B] hover:text-white transition-colors py-1 px-2.5 h-7 rounded-lg"
+          title="Edit Member Details & Photo"
+        >
+          <Edit className="w-3.5 h-3.5 text-[#00629B] group-hover:text-white" />
+          Edit
+        </Button>
+      )}
+
       {/* Top Banner / Chapter Tag */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pr-14">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-slate-800 text-[#00629B] dark:text-[#00A3E0] border border-blue-200 dark:border-slate-700">
             {member.chapter || "IEEE PEC SB"}
           </span>
@@ -126,4 +156,3 @@ export default function TeamMemberCard({ member }: { member: TeamMember }) {
     </div>
   );
 }
-
