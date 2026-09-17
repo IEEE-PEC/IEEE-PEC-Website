@@ -117,14 +117,14 @@ export default function TeamPage() {
 
       {/* Main Team Section */}
       <section className="py-16 bg-slate-50 dark:bg-slate-950 min-h-[60vh]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {filteredMembers.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground text-sm">
               No team members listed in this category yet.
             </div>
           ) : (
-            /* Members Grid */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+            /* Members Grid - 4 per row on same level */
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
               {filteredMembers.map((member) => (
                 <TeamMemberCard
                   key={member.id}
