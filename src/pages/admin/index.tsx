@@ -3,6 +3,10 @@ import { useRouter } from "next/router";
 
 import { client } from "@/lib/supabase/supabase";
 import PageHead from "@/components/layout/PageHead";
+import EditTeamMemberDialog from "@/components/EditTeamMemberDialog";
+import { teamMembersData } from "@/data/team_details";
+import { TeamMember } from "@/types";
+import { getAssetPath } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +21,9 @@ import {
   Save,
   Loader2,
   CheckCircle2,
+  Users,
+  UserPlus,
+  Edit,
 } from "lucide-react";
 
 type Role = "pending" | "interviewer" | "admin";
@@ -61,6 +68,13 @@ export default function InterviewAdminPage() {
   const [whatsappLink, setWhatsappLink] = useState("");
   const [savingSettings, setSavingSettings] = useState(false);
 
+  // WebDev & Core Team Management
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [teamSearch, setTeamSearch] = useState("");
+  const [teamCategoryFilter, setTeamCategoryFilter] = useState<string>("all");
+  const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
+  const [editingTeamMember, setEditingTeamMember] = useState<TeamMember | null>(null);
+
   /*
    * Check admin access
    */
@@ -86,34 +100,60 @@ export default function InterviewAdminPage() {
 
         if (error || !profile) {
           console.error("Profile verification error:", error);
-
           toast.error("Unable to verify your account.");
-
           router.replace("/interview-login");
           return;
         }
 
         if (profile.role !== "admin") {
           toast.error("You do not have admin access.");
-
           router.replace("/interview");
           return;
         }
 
-        await Promise.all([loadProfiles(), loadMembers(), loadSettings()]);
+        await Promise.all([
+          loadProfiles(),
+          loadMembers(),
+          loadSettings(),
+          loadTeamMembers(),
+        ]);
 
         setLoading(false);
       } catch (error) {
         console.error("Admin initialization error:", error);
-
         toast.error("Failed to load admin panel.");
-
         setLoading(false);
       }
     };
 
     checkAdmin();
   }, [router]);
+
+  /*
+   * Load team members
+   */
+  const loadTeamMembers = async () => {
+    try {
+      const { data, error } = await client
+        .from("team_members")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const supabaseIds = new Set(data.map((m: any) => m.id));
+        const combined = [
+          ...data,
+          ...teamMembersData.filter((m) => !supabaseIds.has(m.id)),
+        ];
+        setTeamMembers(combined);
+      } else {
+        setTeamMembers(teamMembersData);
+      }
+    } catch (err) {
+      console.error("Team loading error:", err);
+      setTeamMembers(teamMembersData);
+    }
+  };
 
   /*
    * Load all users
@@ -244,6 +284,26 @@ export default function InterviewAdminPage() {
   }, [profiles, userSearch, userRoleFilter]);
 
   /*
+   * Filtered team members list based on search and category filter
+   */
+  const filteredTeamMembers = useMemo(() => {
+    return teamMembers.filter((m) => {
+      const q = teamSearch.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        m.name.toLowerCase().includes(q) ||
+        m.role.toLowerCase().includes(q) ||
+        (m.department?.toLowerCase().includes(q) ?? false) ||
+        (m.chapter?.toLowerCase().includes(q) ?? false);
+
+      const matchesCategory =
+        teamCategoryFilter === "all" || m.category === teamCategoryFilter;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [teamMembers, teamSearch, teamCategoryFilter]);
+
+  /*
    * Update user role
    */
   const updateRole = async (userId: string, newRole: Role) => {
@@ -335,7 +395,12 @@ export default function InterviewAdminPage() {
    * Refresh all data
    */
   const refreshUsers = async () => {
-    await Promise.all([loadProfiles(), loadMembers(), loadSettings()]);
+    await Promise.all([
+      loadProfiles(),
+      loadMembers(),
+      loadSettings(),
+      loadTeamMembers(),
+    ]);
     toast.success("Data refreshed.");
   };
 
@@ -345,11 +410,10 @@ export default function InterviewAdminPage() {
   if (loading) {
     return (
       <>
-        <PageHead title="Interview Admin Panel" />
-
+        <PageHead title="Admin Dashboard | IEEE PEC" />
         <main className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center">
           <p className="text-gray-500 dark:text-muted-foreground">
-            Loading interview admin panel...
+            Loading admin panel...
           </p>
         </main>
       </>
@@ -358,33 +422,38 @@ export default function InterviewAdminPage() {
 
   return (
     <>
-      <PageHead title="Interview Admin Panel" />
+      <PageHead title="Admin Dashboard | IEEE PEC" />
 
       <main className="min-h-screen bg-gray-50 dark:bg-background">
 
         {/* Header */}
         <section className="bg-[#062b52] dark:bg-[#0a1628] text-white py-10">
-          <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
 
             <div>
               <h1 className="text-3xl font-bold">
-                Interview Admin Panel
+                IEEE PEC Admin Dashboard
               </h1>
-
               <p className="mt-2 text-gray-200 dark:text-gray-300">
-                Manage IEEE PEC interview portal users & roles.
+                Manage interview portal users, audition results, events, and WebDev team members.
               </p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2.5">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/team")}
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent text-xs"
+              >
+                View Team Page
+              </Button>
 
               <Button
                 type="button"
                 variant="outline"
-                onClick={() =>
-                  router.push("/inventory")
-                }
-                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
+                onClick={() => router.push("/inventory")}
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent text-xs"
               >
                 Lab Inventory
               </Button>
@@ -392,10 +461,8 @@ export default function InterviewAdminPage() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() =>
-                  router.push("/events")
-                }
-                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
+                onClick={() => router.push("/events")}
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent text-xs"
               >
                 Manage Events
               </Button>
@@ -403,10 +470,8 @@ export default function InterviewAdminPage() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() =>
-                  router.push("/interview")
-                }
-                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
+                onClick={() => router.push("/interview")}
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent text-xs"
               >
                 Interview Portal
               </Button>
@@ -415,11 +480,10 @@ export default function InterviewAdminPage() {
                 type="button"
                 variant="outline"
                 onClick={handleLogout}
-                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent"
+                className="bg-white dark:bg-card text-black dark:text-foreground hover:bg-gray-100 dark:hover:bg-accent text-xs"
               >
                 Logout
               </Button>
-
             </div>
 
           </div>
@@ -558,7 +622,155 @@ export default function InterviewAdminPage() {
             </form>
           </section>
 
-          {/* ── Panel 1: Promote Selected Members to Interviewer ── */}
+          {/* ── Panel 1: WebDev & Core Team Management ── */}
+          <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#00629B]" />
+                  WebDev &amp; Core Team Management
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                  Add members to the WebDev team, edit their roles, and upload profile photos.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={loadTeamMembers}
+                >
+                  Refresh
+                </Button>
+
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setEditingTeamMember(null);
+                    setIsTeamDialogOpen(true);
+                  }}
+                  className="bg-[#00629B] hover:bg-[#004B7A] text-white text-xs font-semibold gap-2 shadow-sm rounded-xl px-4"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  + Add Member to WebDev Team
+                </Button>
+              </div>
+            </div>
+
+            {/* Search & Category Filter */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 my-4">
+              <div className="relative flex-grow">
+                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Input
+                  placeholder="Search team members by name, role, department..."
+                  value={teamSearch}
+                  onChange={(e) => setTeamSearch(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                {[
+                  { id: "all", label: "All" },
+                  { id: "web", label: "Web & IT" },
+                  { id: "lead", label: "Leads" },
+                  { id: "executive", label: "Executive" },
+                  { id: "technical", label: "Technical" },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setTeamCategoryFilter(cat.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap ${
+                      teamCategoryFilter === cat.id
+                        ? "bg-[#00629B] text-white shadow-sm"
+                        : "bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Grid of Team Members */}
+            {filteredTeamMembers.length === 0 ? (
+              <p className="text-gray-500 dark:text-muted-foreground text-sm py-4">
+                No team members match your search or filter.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                {filteredTeamMembers.map((m) => {
+                  const initials = m.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase();
+
+                  return (
+                    <div
+                      key={m.id}
+                      className="flex items-center justify-between p-4 rounded-xl border border-border bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100/80 dark:hover:bg-slate-900 transition-colors gap-4"
+                    >
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        {m.image ? (
+                          <img
+                            src={getAssetPath(m.image)}
+                            alt={m.name}
+                            className="w-12 h-12 rounded-xl object-cover border border-border shrink-0"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#002855] to-[#00629B] text-white flex items-center justify-center font-bold text-sm shrink-0 border border-white/20">
+                            {initials}
+                          </div>
+                        )}
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-sm text-foreground truncate">
+                              {m.name}
+                            </h4>
+                            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-blue-100 dark:bg-slate-800 text-[#00629B] dark:text-[#00A3E0] uppercase tracking-wider shrink-0">
+                              {m.category || "web"}
+                            </span>
+                          </div>
+                          <p className="text-xs font-semibold text-[#00629B] dark:text-[#00A3E0] truncate mt-0.5">
+                            {m.role}
+                          </p>
+                          <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                            {m.department || m.chapter || "IEEE PEC"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingTeamMember(m);
+                          setIsTeamDialogOpen(true);
+                        }}
+                        className="text-xs gap-1.5 font-semibold shrink-0"
+                      >
+                        <Edit className="w-3.5 h-3.5 text-[#00629B]" />
+                        Edit Member
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          {/* ── Panel 2: Promote Selected Members to Interviewer ── */}
           <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
 
             <div className="flex items-center justify-between mb-1">
@@ -657,7 +869,7 @@ export default function InterviewAdminPage() {
             )}
           </section>
 
-          {/* ── Panel 2: Portal User Management ── */}
+          {/* ── Panel 3: Portal User Management ── */}
           <section className="bg-white dark:bg-card border dark:border-border rounded-xl shadow-sm p-6">
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -769,7 +981,15 @@ export default function InterviewAdminPage() {
 
         </div>
 
+        {/* Dialog for adding & editing WebDev team members */}
+        <EditTeamMemberDialog
+          open={isTeamDialogOpen}
+          onOpenChange={setIsTeamDialogOpen}
+          member={editingTeamMember}
+          onSuccess={loadTeamMembers}
+        />
+
       </main>
     </>
   );
-}
+}
