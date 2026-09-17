@@ -11,6 +11,8 @@ import { useAdmin } from "@/hooks/useAdmin";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, UserPlus, Sparkles } from "lucide-react";
 
+import { getTeamMembers } from "@/lib/teamStorage";
+
 export default function TeamPage() {
   const [members, setMembers] = useState<TeamMember[]>(teamMembersData);
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -21,23 +23,10 @@ export default function TeamPage() {
 
   const fetchTeamMembers = useCallback(async () => {
     try {
-      const { data, error } = await client
-        .from("team_members")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (!error && data && data.length > 0) {
-        const supabaseIds = new Set(data.map((m: any) => m.id));
-        const combined = [
-          ...data,
-          ...teamMembersData.filter((m) => !supabaseIds.has(m.id)),
-        ];
-        setMembers(combined);
-      } else {
-        setMembers(teamMembersData);
-      }
+      const data = await getTeamMembers();
+      setMembers(data);
     } catch (err) {
-      console.warn("Could not fetch team members from database, using static fallback.", err);
+      console.warn("Fetch team members error:", err);
       setMembers(teamMembersData);
     }
   }, []);

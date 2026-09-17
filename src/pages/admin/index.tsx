@@ -5,6 +5,7 @@ import { client } from "@/lib/supabase/supabase";
 import PageHead from "@/components/layout/PageHead";
 import EditTeamMemberDialog from "@/components/EditTeamMemberDialog";
 import { teamMembersData } from "@/data/team_details";
+import { getTeamMembers } from "@/lib/teamStorage";
 import { TeamMember } from "@/types";
 import { getAssetPath } from "@/lib/utils";
 
@@ -134,21 +135,8 @@ export default function InterviewAdminPage() {
    */
   const loadTeamMembers = async () => {
     try {
-      const { data, error } = await client
-        .from("team_members")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (!error && data && data.length > 0) {
-        const supabaseIds = new Set(data.map((m: any) => m.id));
-        const combined = [
-          ...data,
-          ...teamMembersData.filter((m) => !supabaseIds.has(m.id)),
-        ];
-        setTeamMembers(combined);
-      } else {
-        setTeamMembers(teamMembersData);
-      }
+      const data = await getTeamMembers();
+      setTeamMembers(data);
     } catch (err) {
       console.error("Team loading error:", err);
       setTeamMembers(teamMembersData);

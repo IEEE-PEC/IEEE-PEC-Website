@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { TeamMember } from "@/types";
-import { client } from "@/lib/supabase/supabase";
+import {
+  uploadTeamMemberImage,
+  saveTeamMember,
+  removeTeamMember,
+} from "@/lib/teamStorage";
 import {
   Dialog,
   DialogContent,
@@ -141,55 +145,6 @@ export default function EditTeamMemberDialog({
     }
   };
 
-  const uploadImage = async (file: File): Promise<string> => {
-    // Convert file to base64 fallback or upload to Supabase storage bucket
-    const fileExt = file.name.split(".").pop() || "jpg";
-    const cleanExt = fileExt.toLowerCase();
-    const fileName = `webdev_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${cleanExt}`;
-
-    try {
-      const { error: uploadError } = await client.storage
-        .from("team-images")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (!uploadError) {
-        const { data: publicData } = client.storage
-          .from("team-images")
-          .getPublicUrl(fileName);
-        return publicData.publicUrl;
-      }
-    } catch (err) {
-      console.warn("Storage upload warning, attempting fallback bucket:", err);
-    }
-
-    // Try event-images bucket as fallback if team-images isn't configured
-    try {
-      const { error: eventUploadErr } = await client.storage
-        .from("event-images")
-        .upload(fileName, file, { cacheControl: "3600", upsert: true });
-
-      if (!eventUploadErr) {
-        const { data: publicData } = client.storage
-          .from("event-images")
-          .getPublicUrl(fileName);
-        return publicData.publicUrl;
-      }
-    } catch (err) {
-      console.warn("Event images bucket fallback failed:", err);
-    }
-
-    // High compatibility Base64 fallback if storage bucket is missing
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -210,7 +165,7 @@ export default function EditTeamMemberDialog({
 
       if (selectedFile) {
         toast.info("Uploading profile image...");
-        finalImageUrl = await uploadImage(selectedFile);
+        finalImageUrl = await uploadTeamMemberImage(selectedFile);
       }
 
       const socialsObj = {
@@ -220,42 +175,28 @@ export default function EditTeamMemberDialog({
         ...(website.trim() ? { website: website.trim() } : {}),
       };
 
-      const memberPayload = {
+      const memberId = member?.id || `webdev-${Date.now()}`;
+
+      const memberPayload: TeamMember = {
+        id: memberId,
         name: name.trim(),
         role: role.trim(),
         category,
         chapter,
-        department: department.trim() || null,
-        year: year.trim() || null,
-        description: description.trim() || null,
-        image: finalImageUrl || null,
-        socials: Object.keys(socialsObj).length > 0 ? socialsObj : null,
-        updated_at: new Date().toISOString(),
+        department: department.trim() || undefined,
+        year: year.trim() || undefined,
+        description: description.trim() || undefined,
+        image: finalImageUrl || "",
+        socials: Object.keys(socialsObj).length > 0 ? socialsObj : undefined,
       };
 
-      const memberId = member?.id || `webdev-${Date.now()}`;
+      await saveTeamMember(memberPayload);
 
-      // Persist to Supabase team_members table
-      const { error } = await client.from("team_members").upsert({
-        id: memberId,
-        ...memberPayload,
-      });
-
-      if (error) {
-        console.error("Supabase upsert error:", error);
-        // Fallback info if table is not yet created in Supabase SQL
-        toast.success(
-          isEditing
-            ? "Team member details updated!"
-            : "New WebDev team member added successfully!"
-        );
-      } else {
-        toast.success(
-          isEditing
-            ? "Team member details updated!"
-            : "New WebDev team member added successfully!"
-        );
-      }
+      toast.success(
+        isEditing
+          ? "Team member details & photo updated!"
+          : "New WebDev team member added successfully!"
+      );
 
       onSuccess();
       onOpenChange(false);
@@ -273,9 +214,7 @@ export default function EditTeamMemberDialog({
 
     setDeleting(true);
     try {
-      const { error } = await client.from("team_members").delete().eq("id", member.id);
-      if (error) console.error("Delete Supabase error:", error);
-
+      await removeTeamMember(member.id);
       toast.success("Team member removed.");
       onSuccess();
       onOpenChange(false);
