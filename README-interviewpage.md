@@ -1,21 +1,22 @@
-# IEEE PEC Website — `interview-page` Branch Documentation
+# IEEE PEC Website — Interview Portal & Admin Features Documentation
 
-This document contains a comprehensive record of all features, enhancements, portal architecture, database integrations, and UI upgrades implemented in the `interview-page` branch of the IEEE PEC Student Branch website repository.
+This document contains a comprehensive record of all features, enhancements, portal architecture, database integrations, and UI upgrades implemented in the IEEE PEC Student Branch website repository.
 
 ---
 
-## 📌 Branch Purpose & Objectives
+## 📌 Core Purpose & Objectives
 
 1. **Streamline Student Auditions & Membership Intake:** Candidate logs in via official PEC Google Account (`@pec.edu.in`), pre-fills & locks verified email, and auto-detects Academic Year from SID.
-2. **Dedicated Interview Evaluation Portal:** Allow authorized seniors/interviewers to evaluate candidates across multiple scoring criteria with live statistics and real-time status updates.
-3. **Audition Results Release Control:** Admin panel toggle (`results_published`) to declare or hold results for a specific audition event cycle.
+2. **Dedicated Interview Evaluation Portal (`/interview`):** Allow authorized seniors/interviewers to evaluate candidates across multiple scoring criteria with live statistics and real-time status updates.
+3. **Audition Results Release Control:** Admin panel toggle (`results_published`) to declare or hold results for a specific audition event cycle on `/apply`.
 4. **Candidate Result Views & WhatsApp Community:**
    - **Selected:** Congratulatory banner with 1-click **Official WhatsApp Community Join Button** (link configured by Admin).
    - **Hold:** Waitlist notification.
    - **Not Selected:** Encouraging message highlighting future workshop participation.
-5. **Member Promotion Engine:** Promote selected 1st-year candidates into interviewers for subsequent audition cycles directly from the admin panel.
-6. **Dynamic Frontend Content & Photo Management:** Enable website administrators to create, update, and delete events with direct photo uploads from their laptop to Supabase Storage without touching the codebase.
-7. **Modernized UI & Theming:** Custom *Midnight Cyber* dark mode and *Clean Minimalist* light mode with localStorage persistence.
+5. **WebDev & Core Team Management Console:** Admin panel section to add new members (**`+ Add Member to WebDev Team`**), edit team member details, upload profile photos directly from a laptop, and manage roster categories.
+6. **Member Promotion Engine:** Promote selected 1st-year candidates into interviewers for subsequent audition cycles directly from the admin panel.
+7. **Dynamic Frontend Content & Photo Management:** Enable website administrators to create, update, and delete events with direct photo uploads to Supabase Storage without touching the codebase.
+8. **Modernized UI & Theming:** Custom *Midnight Cyber* dark mode and *Clean Minimalist* light mode with localStorage persistence.
 
 ---
 
@@ -52,9 +53,10 @@ This document contains a comprehensive record of all features, enhancements, por
           │
           ▼
 [ Admin Panel: /admin ]
-  (1. Set WhatsApp Group Link & Audition Cycle Name)
-  (2. Toggle 1-Click "Release Results" ON/OFF)
-  (3. Search Selected members ➔ 1-Click "Promote to Interviewer")
+  ├─ 1. Release Audition Results & Set WhatsApp Group Link
+  ├─ 2. WebDev Team Management (+ Add Member, Edit, Laptop Photo Upload)
+  ├─ 3. Promote Selected Members to Interviewer Role
+  └─ 4. Manage Portal User Roles (Pending, Interviewer, Admin)
           │
           ▼
 [ Candidate Checks /apply ]
@@ -75,7 +77,7 @@ This document contains a comprehensive record of all features, enhancements, por
   - 🟣 **Admin** ➔ Direct shortcut to `/admin`
   - 🔵 **Interviewer** ➔ Direct shortcut to `/interview`
   - 🟡 **Pending** ➔ Direct shortcut to `/pending`
-- Reordered navigation: `Webdev Team` moved to last.
+- Reordered navigation with quick access to Lab Inventory, Events, and Team.
 - Integrated theme toggle in both desktop and mobile drawer views.
 
 ### 2. Dark/Light Theme Engine (`Midnight Cyber` + `Clean Minimalist`)
@@ -89,7 +91,6 @@ This document contains a comprehensive record of all features, enhancements, por
   - `25XXXXXX` ➔ Auto-selects **1st Year**
   - `24XXXXXX` ➔ Auto-selects **2nd Year**
   - `23XXXXXX` ➔ Auto-selects **3rd Year**
-- Removed placeholder example text for cleaner form aesthetics.
 
 ### 4. Full-Featured Interview Portal (`src/pages/interview.tsx`)
 - **Parallel Data Fetching:** Loads applicants and existing evaluations concurrently via `Promise.all`.
@@ -103,36 +104,31 @@ This document contains a comprehensive record of all features, enhancements, por
   - Comments / Observations.
   - Re-evaluation / Score update capability for already evaluated candidates.
 
-### 5. Automatic Status Synchronization
-- Submitting an evaluation automatically updates `applications.status` in Supabase:
-  - `Select` ➔ `Selected`
-  - `Hold` ➔ `Hold`
-  - `Reject` ➔ `Rejected`
-- Instant local state update ensures zero-latency UI updates without requiring a manual browser refresh.
+### 5. WebDev & Core Team Management (`src/pages/admin/index.tsx`, `EditTeamMemberDialog.tsx`)
+- **`+ Add Member to WebDev Team` Button:** Opens modal to register new web developers or executives.
+- **`Edit Member` Button:** Allows editing full name, role/title, category (*Web & IT*, *Leadership*, *Executive*, *Technical*, *Hardware*), IEEE chapter, department, term, and bio.
+- **Laptop Photo Upload:** File picker allowing admins to upload custom headshots directly from their laptop (with live image preview), or paste image URLs.
+- **Social Links Integration:** Supports GitHub, LinkedIn, Email, and Website URLs.
+- **Team Roster Delete:** Delete option with prompt verification.
 
 ### 6. Admin Panel with Member Promotion & Results Control (`src/pages/admin/index.tsx`)
-- **Panel 1 — Promote Members to Interviewer:**
+- **Panel 0 — Audition Results & Selection Release:**
+  - Toggle 1-Click "Release Results to Public" on `/apply`.
+  - Set active audition cycle name and WhatsApp group link.
+- **Panel 1 — WebDev & Core Team Management:**
+  - Add, edit, and upload headshots for team members with category filters.
+- **Panel 2 — Promote Members to Interviewer:**
   - Automatically lists all candidates marked as `Selected`.
-  - Live search by Name, College Email, or SID.
-  - 1-Click **"Promote to Interviewer"** button that upgrades the member's profile role in Supabase.
-  - Smart status indicators (shows green `Interviewer`/`Admin` badge if already promoted, or warns if the user hasn't logged into the portal yet).
-- **Panel 2 — Portal User Management:**
-  - View all authenticated users.
-  - Role dropdowns to promote or demote users between `Pending`, `Interviewer`, and `Admin`.
+  - Search by Name, College Email, or SID.
+  - 1-Click **"Promote to Interviewer"** button upgrading member role in Supabase.
+- **Panel 3 — Portal User Management:**
+  - Search & role dropdowns to promote or demote users between `Pending`, `Interviewer`, and `Admin`.
 
 ### 7. Frontend Event & Laptop Photo Management (`src/components/EditEventDialog.tsx`, `/events`)
 - When logged in as an administrator:
-  - A **✏️ Pencil Edit Button** appears on every event card on the homepage and `/events` page.
-  - A **"+ Add New Event"** button appears at the top of the `/events` page.
-  - Admins can edit Title, Category, Short Description, Detailed Overview, and Capacity.
-  - **Direct Photo Upload from Laptop:** Image files selected via the dialog are automatically uploaded to the Supabase Storage bucket `event-images` with unique filenames, and the public URL is saved to the database.
-  - Delete event functionality with confirmation.
-- Dynamic data fetching with fallback to static data if the Supabase database is empty.
-
-### 8. Cleanup & Simplification
-- Removed the bottom "Apply for Membership" CTA block from the homepage.
-- Removed "Participate" and "Apply / Register" buttons from past events.
-- Removed sample names and dummy phone numbers from `contact.tsx` and `apply.tsx`.
+  - A **✏️ Pencil Edit Button** appears on event cards.
+  - A **"+ Add New Event"** button appears at the top of `/events`.
+  - Direct photo upload from laptop to Supabase Storage bucket `event-images`.
 
 ---
 
@@ -143,15 +139,15 @@ This document contains a comprehensive record of all features, enhancements, por
 | `profiles` | User accounts & RBAC roles | `id`, `email`, `full_name`, `role` (`pending`/`interviewer`/`admin`) |
 | `applications` | Student audition submissions | `id`, `full_name`, `sid`, `email`, `phone`, `branch`, `year`, `chapters`, `domains`, `status` |
 | `interviews` | Candidate evaluation scores | `id`, `application_id`, `interviewer_name`, `technical_score`, `communication_score`, `confidence_score`, `teamwork_score`, `overall_score`, `recommendation`, `comments` |
+| `team_members` | WebDev & Executive team roster | `id`, `name`, `role`, `category`, `chapter`, `department`, `year`, `image`, `description`, `socials` |
 | `events` | Dynamic event posts & symposiums | `id`, `title`, `category`, `description`, `long_description`, `image_url`, `capacity`, `registration_open` |
-| Storage Bucket: `event-images` | Storage for uploaded event banners | Public image assets uploaded by administrators |
-
-*(Complete SQL definitions available in [`supabase/schema.sql`](./supabase/schema.sql))*
+| `portal_settings` | Audition cycle controls | `id`, `audition_event_name`, `results_published`, `whatsapp_group_link` |
+| Storage Buckets | `event-images`, `team-images` | Storage for uploaded event banners and member headshots |
 
 ---
 
 ## 🚢 Deployment Details
 
 - **Hosting Platform:** Vercel (Production)
-- **Framework:** Next.js (Static HTML Export with client-side Supabase runtime)
-- **Live Production URL:** [https://ieee-pec-interview-portal.vercel.app](https://ieee-pec-interview-portal.vercel.app)
+- **Framework:** Next.js 15 (Pages Router)
+- **Live Production URL:** [https://ieeepec.vercel.app](https://ieeepec.vercel.app)

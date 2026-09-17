@@ -4,16 +4,17 @@
 [![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Pages-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/IEEE-PEC/IEEE-PEC-Website/actions)
+[![Supabase](https://img.shields.io/badge/Supabase-Database%20%26%20Auth-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-The official web platform for the **IEEE Student Branch at Punjab Engineering College (Deemed to be University), Chandigarh**. Built from the ground up as a blazing-fast, modern, mobile-responsive static web application with Next.js, TypeScript, and Tailwind CSS.
+The official web platform & audition portal for the **IEEE Student Branch at Punjab Engineering College (Deemed to be University), Chandigarh**. Built from the ground up as a blazing-fast, modern, mobile-responsive web application with Next.js, TypeScript, Tailwind CSS, and Supabase.
 
 ---
 
 ## 🌐 Live Website & Links
 
-- **Repository:** [https://github.com/IEEE-PEC/IEEE-PEC-Website](https://github.com/IEEE-PEC/IEEE-PEC-Website)
+- **Live Production Website:** [https://ieeepec.vercel.app](https://ieeepec.vercel.app)
+- **GitHub Repository:** [https://github.com/IEEE-PEC/IEEE-PEC-Website](https://github.com/IEEE-PEC/IEEE-PEC-Website)
 - **Official PEC Portal:** [https://pec.ac.in/ieee](https://pec.ac.in/ieee)
 - **LinkedIn:** [https://www.linkedin.com/company/ieee-pec/](https://www.linkedin.com/company/ieee-pec/)
 - **Instagram Handle:** [@ieeepec](https://www.instagram.com/ieeepec)
@@ -26,53 +27,52 @@ The official web platform for the **IEEE Student Branch at Punjab Engineering Co
 
 | Category | Technologies / Libraries |
 |---|---|
-| **Core Framework** | [Next.js](https://nextjs.org/) (Pages Router) with Full Static Site Generation (`output: 'export'`) |
+| **Core Framework** | [Next.js 15](https://nextjs.org/) (Pages Router) with Static Export & Client-Side Runtime |
 | **UI Library** | [React 18](https://react.dev/) |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) for strict type safety |
-| **Styling & Design System** | [Tailwind CSS](https://tailwindcss.com/), PostCSS, Autoprefixer |
-| **UI Component Primitives** | [Radix UI](https://www.radix-ui.com/) (Dialogs, Tabs, Accordions, Dropdown Menus, Popovers, Tooltips) |
+| **Styling & Design System** | [Tailwind CSS 3.4](https://tailwindcss.com/), PostCSS, Autoprefixer |
+| **UI Component Primitives** | [Radix UI](https://www.radix-ui.com/) & [shadcn/ui](https://ui.shadcn.com/) (Dialogs, Tabs, Accordions, Dropdown Menus, Popovers, Tooltips) |
 | **Icons & Typography** | [Lucide React](https://lucide.dev/) + Plus Jakarta Sans / Inter fonts |
-| **Motion & Animations** | [Framer Motion](https://www.framer.com/motion/) for fluid cross-fading carousels & entrance transitions |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) for fluid cross-fading carousels & transitions |
 | **Notifications & Toast** | [Sonner](https://sonner.emilkowal.ski/) |
-| **Utilities** | `clsx`, `tailwind-merge` for class composition |
-| **CI / CD & Deployment** | GitHub Actions (`.github/workflows/deploy.yml`) deploying to GitHub Pages |
+| **Backend / Database** | [Supabase](https://supabase.com/) (PostgreSQL, Google OAuth, Storage Buckets & RLS) |
+| **Hosting & CD** | [Vercel](https://vercel.com/) Auto-Deployment from `main` branch |
 
 ---
 
 ## 🚀 Key Features & Modules
 
-### 1. 🏛️ Specialized Societies & Chapters
-Showcases IEEE PEC's 3 distinct technical chapters in ordered structure:
-1. **IEEE Power & Energy Society (PES):** Hardware bot making (1kg/3kg Robo-Soccer & Robo-Race), circuit troubleshooting, PCB layout (EasyEDA, TinkerCAD), and power electronics.
+### 1. 🏛️ Specialized Societies & Chapters ([/chapters](https://ieeepec.vercel.app/chapters))
+Showcases IEEE PEC's 3 distinct technical chapters:
+1. **IEEE Power & Energy Society (PES):** Hardware bot fabrication (1kg/3kg Robo-Soccer & Robo-Race), circuit troubleshooting, PCB layout (EasyEDA, TinkerCAD), and power electronics.
 2. **IEEE Computer Society (CS):** Competitive programming, C++ OOPs fundamentals, AI/ML study bootcamps, Bug-Busters debugging contests, and web architecture.
 3. **IEEE Women in Engineering (WIE):** Peer-to-peer mentorship networks, "Girls in Tech" school outreach, and diversity-in-STEM leadership initiatives.
 
-### 2. 🤖 Innovations & Project Gallery ([/project](http://localhost:3000/project))
-- Interactive project showcase including the **Mechanical Gripper Bot**, **Terrain Mapping Drone**, **Air-Cushion RC Hovercraft**, **Interactive Gaming Platform**, **Hack-O-Meme Generator**, and **Pneumatic Water Rocket System**.
-- Clean presentation with category filters, technology badges, and architecture modal overviews.
+### 2. 💻 WebDev & Core Team Directory ([/team](https://ieeepec.vercel.app/team))
+- Showcases the WebDev team, Executive Board, and technical domain leads for 2026–2027.
+- Supports photo uploads, avatar initials fallback, social links (GitHub, LinkedIn, Email, Website), and interactive category filtering (*All Members*, *Web & IT Team*, *Leadership*, *Executive Board*, *Technical Domain*, *Hardware & Bots*).
 
-### 3. 📅 Flagship Events & Competitions ([/events](http://localhost:3000/events))
-- **Techadroit:** Flagship 3-day multi-track technical symposium.
-- **PECFEST Robo-Soccer Championship:** Knockout robotics arena tournament across 1kg lightweight and 3kg heavyweight divisions.
-- **Bootcamps & Workshops:** Hands-On Hardware & PCB Design, Intro to C++ Programming, and Bot-Making sprints.
-- **Guest Lectures:** Special mindfulness & science sessions like *"Buddha: The Super Scientist"*.
-- **Outstanding Student Branch Award Celebration:** Conferred by IEEE Chandigarh Subsection.
+### 3. 🛡️ Staff Admin Dashboard ([/admin](https://ieeepec.vercel.app/admin))
+Admin-only console for managing all website assets and candidate auditions:
+- **Audition Results & Selection Release:** 1-click toggle to release or hold audition results, and update WhatsApp Community links.
+- **WebDev & Core Team Management:** Add new team members via **`+ Add Member to WebDev Team`**, edit details, upload photos directly from your laptop, and manage roster categories.
+- **Promote Members to Interviewer:** Search selected candidates from auditions and promote them to Interviewers with 1 click.
+- **Portal User Management:** RBAC role controls (`pending`, `interviewer`, `admin`) with search & filter.
 
-### 4. 📚 Curated Learning Resources & Roadmaps ([/resources](http://localhost:3000/resources))
-- **Docify Knowledge Base:** Official multidisciplinary engineering docs covering CAD, electronics, firmware, ROS 2, and software.
-- **Striver's A2Z DSA Sheet:** Comprehensive Data Structures & Algorithms curriculum from beginner to advanced graphs and dynamic programming.
-- **roadmap.sh Interactive Paths:** Computer Science, Frontend, Backend, AI/Data Science, and DevOps roadmaps.
-- **Hardware Guides:** ROS 2 Humble Navigation, KiCad 8 PCB design cheatsheet, and IEEE Xplore LaTeX research paper publishing manuals.
+### 4. 📝 Auditions & Interview Portal ([/apply](https://ieeepec.vercel.app/apply) & [/interview](https://ieeepec.vercel.app/interview))
+- **Student Applications (`/apply`):** Google OAuth sign-in (`@pec.edu.in`), SID auto-detection of academic year (1st, 2nd, 3rd), candidate status checking, and result announcement banners.
+- **Interviewer Evaluation Console (`/interview`):** Scoring sheet across Technical, Communication, Confidence, and Teamwork criteria, recommendation system (`Select`, `Hold`, `Reject`), real-time evaluation sync, and walk-in candidate registration.
 
-### 5. 👥 2026–2027 Executive Committee ([/team](http://localhost:3000/team))
-- Dedicated leadership directory for the 2026–2027 executive board featuring **Shashwat Mishra** (Secretary), **Pratyush Kumar** (Web & IT Mentor), **Aryan Mahendru** (Assistant Secretary), and **Ansh Agnihotry** (Assistant Joint Secretary).
-- Uniform, stylized gradient initials avatar placeholders with crisp typography.
+### 5. 🛠️ Lab Inventory Portal ([/inventory](https://ieeepec.vercel.app/inventory))
+- Hardware catalog tracking microcontrollers, sensors, actuators, tools, and communication modules.
+- Borrow/return logging system for student projects and bot fabrication.
 
-### 6. 📝 Recruitment & Membership Portal ([/apply](http://localhost:3000/apply))
-- Comprehensive student membership application system with chapter preferences (PES, CS, WIE), domain tracks, and portfolio submissions.
+### 6. 🤖 Innovations & Project Gallery ([/project](https://ieeepec.vercel.app/project))
+- Interactive project showcase including **Mechanical Gripper Bot**, **Terrain Mapping Drone**, **Air-Cushion RC Hovercraft**, **Interactive Gaming Platform**, **Hack-O-Meme Generator**, and **Pneumatic Water Rocket System**.
 
-### 7. 🔒 Secure Staff Portal & Admin Console ([/admin](http://localhost:3000/admin))
-- Passcode-authenticated management console to track hardware catalog components, project entries, event schedules, and branch activities.
+### 7. 📅 Events & Workshop Management ([/events](https://ieeepec.vercel.app/events))
+- Flagship symposiums (**Techadroit**), **PECFEST Robo-Soccer Championship**, C++ bootcamps, and guest lectures.
+- Admin inline editing & photo upload directly on event cards.
 
 ---
 
@@ -80,33 +80,35 @@ Showcases IEEE PEC's 3 distinct technical chapters in ordered structure:
 
 ```plaintext
 IEEE-PEC-Website/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # Automated GitHub Pages CI/CD workflow
 ├── public/
 │   └── images/
-│       ├── chapters/           # PES, CS, and WIE real banners
+│       ├── chapters/           # PES, CS, and WIE real banners & logos
 │       ├── docs/               # Real assets from Annual Report
 │       ├── events/             # Real event & Robo-Soccer match photos
-│       ├── hero/               # Orientation crowd, bot making & arena photos
+│       ├── hero/               # Orientation crowd & bot-making photos
 │       ├── logos/              # Real IEEE, PES, CS, and WIE logos
-│       └── ppt/                # Extracted media from orientation deck
+│       ├── projects/           # Bot and student innovation pictures
+│       └── team/               # Executive committee portraits
 ├── src/
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── Footer.tsx      # Global footer with social links & credits
-│   │   │   ├── Header.tsx      # Navigation bar with real brand emblem
+│   │   │   ├── Header.tsx      # Nav bar with Google Auth profile dropdown & dark mode toggle
 │   │   │   ├── Loader.tsx      # Page loading spinner
 │   │   │   ├── PageHead.tsx    # Dynamic SEO metadata & OpenGraph tags
 │   │   │   └── PageLayout.tsx  # Wrapper layout component
 │   │   ├── ui/                 # Accessible Radix UI + Tailwind components
 │   │   ├── ChaptersSection.tsx # 3-Chapter home showcase with real logos
-│   │   ├── EventCard.tsx       # Event card with category badges
+│   │   ├── EditEventDialog.tsx # Admin dialog for creating/editing events & photo uploads
+│   │   ├── EditTeamMemberDialog.tsx # Admin dialog for WebDev team members & photo uploads
+│   │   ├── EventCard.tsx       # Event card with category badges & admin edit trigger
 │   │   ├── Hero.tsx            # Animated cross-fade hero carousel
-│   │   ├── InventoryCatalog.tsx# Hardware inventory catalog
+│   │   ├── InventoryCatalog.tsx# Hardware inventory catalog component
 │   │   ├── ProjectCard.tsx     # Clean project cards & detail modal
 │   │   ├── StatsSection.tsx    # Live branch stats counters
-│   │   └── TeamMemberCard.tsx  # Executive team card with avatar initials
+│   │   └── TeamMemberCard.tsx  # Team member card with photos & social icons
+│   ├── context/
+│   │   └── ThemeContext.tsx    # Dark/Light theme state provider (localStorage backed)
 │   ├── data/
 │   │   ├── chapters_data.ts    # PES, CS, and WIE chapter details & logos
 │   │   ├── events_data.ts      # Techadroit, PECFEST, and workshops
@@ -114,31 +116,40 @@ IEEE-PEC-Website/
 │   │   ├── projects_data.ts    # Student engineering innovations
 │   │   ├── resources_data.ts   # Docify, Striver DSA sheet, roadmap.sh
 │   │   └── team_details.ts     # 2026–2027 Executive Board roster
+│   ├── hooks/
+│   │   └── useAdmin.ts         # Hook to check if current user has admin role
 │   ├── lib/
-│   │   ├── supabase/           # Supabase client helper
-│   │   └── utils.ts            # Class merging & utility constants
+│   │   ├── supabase/
+│   │   │   └── supabase.ts     # Supabase client helper
+│   │   └── utils.ts            # Class merging & getAssetPath helpers
 │   ├── pages/
-│   │   ├── index.tsx           # Home Landing Page
+│   │   ├── index.tsx           # Homepage
+│   │   ├── admin/index.tsx     # Staff Admin Dashboard (Results, WebDev Team, Promotion, Roles)
+│   │   ├── apply.tsx           # Audition Application Form & Candidate Results
+│   │   ├── auth/callback.tsx   # Supabase OAuth redirect & auto-profile creation
 │   │   ├── chapters/index.tsx  # Specialized Chapters (PES, CS, WIE)
-│   │   ├── team/index.tsx      # 2026–2027 Executive Committee
-│   │   ├── project/index.tsx   # Engineering Innovations Gallery
-│   │   ├── events/index.tsx    # Events & Workshops Directory
-│   │   ├── resources/index.tsx # Roadmaps, Docify & Learning Toolkits
-│   │   ├── apply.tsx           # Student Auditions & Application Form
 │   │   ├── contact.tsx         # Contact Form & Official Channels
-│   │   ├── inventory/index.tsx # Hardware Lab Portal (Admin Restricted)
-│   │   ├── admin/index.tsx     # Unified Staff Console
-│   │   ├── 404.tsx             # 404 Custom Error Page
-│   │   ├── _app.tsx            # Global App Shell & Font Config
+│   │   ├── events/index.tsx    # Events & Workshops Directory
+│   │   ├── interview.tsx       # Senior Evaluation Console
+│   │   ├── interview-login.tsx # Google OAuth Login Portal (@pec.edu.in)
+│   │   ├── inventory/index.tsx # Lab Hardware Inventory Management
+│   │   ├── pending.tsx         # Account Pending Approval Screen
+│   │   ├── project/index.tsx   # Engineering Innovations Gallery
+│   │   ├── resources/index.tsx # Learning Roadmaps & Toolkits
+│   │   ├── team/index.tsx      # WebDev & Executive Leadership Page
+│   │   ├── 404.tsx             # Custom 404 Error Page
+│   │   ├── _app.tsx            # App Shell with Theme & Sonner Toast Providers
 │   │   └── _document.tsx       # HTML Document Structure
 │   ├── styles/
-│   │   └── globals.css         # IEEE Blue theme tokens & CSS animations
+│   │   └── globals.css         # Tailwind directives & Midnight Cyber theme
 │   └── types/
-│       └── index.d.ts          # TypeScript type declarations
-├── next.config.ts              # Next.js static export configuration (`output: 'export'`)
+│       └── index.d.ts          # TypeScript interfaces (TeamMember, Event, etc.)
+├── supabase/
+│   └── schema.sql              # Supabase PostgreSQL schema with RLS policies
+├── next.config.ts              # Next.js configuration (`output: 'export'`)
 ├── tailwind.config.ts          # Tailwind theme colors & extensions
 ├── tsconfig.json               # TypeScript compiler config
-└── package.json                # Project dependencies & scripts
+└── package.json                # Project dependencies & npm scripts
 ```
 
 ---
@@ -148,12 +159,13 @@ IEEE-PEC-Website/
 ### Prerequisites
 - **Node.js**: `v18.17.0` or higher
 - **npm** / **yarn** / **pnpm**
+- **Supabase Account** with Google OAuth configured for `@pec.edu.in` domain.
 
 ### Step-by-Step Guide
 
 ```bash
 # 1. Clone the repository
-git clone git@github.com:IEEE-PEC/IEEE-PEC-Website.git
+git clone https://github.com/IEEE-PEC/IEEE-PEC-Website.git
 
 # 2. Navigate to the project directory
 cd IEEE-PEC-Website
@@ -161,7 +173,11 @@ cd IEEE-PEC-Website
 # 3. Install dependencies
 npm install
 
-# 4. Start the local development server
+# 4. Create .env.local file
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# 5. Start the local development server
 npm run dev
 ```
 
@@ -169,47 +185,16 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 🏗️ Production Build & Static Export
+## 🏗️ Production Build & Vercel Deployment
 
-To build the project for static hosting (e.g. GitHub Pages, Vercel, Netlify, or Apache/Nginx):
+To build the project for static hosting:
 
 ```bash
-# Generate the optimized static production export in the `out/` directory
+# Generate optimized production build
 npm run build
 ```
 
-The output will be generated in the `out/` folder as pure pre-rendered HTML, CSS, JavaScript, and optimized media ready for instant static delivery.
-
----
-
-## 🚢 Continuous Deployment & Hosting Architecture
-
-### How Next.js Static Export Works on GitHub Pages
-1. **GitHub Actions Build Pipeline:** When code is pushed to `main`, GitHub Actions uses Node.js in an isolated container to run `npm run build`.
-2. **Pre-rendering:** Next.js compiles all dynamic pages, components, and datasets into static `.html`, `.css`, and `.js` files in the `./out` directory.
-3. **Pure Static Serving:** GitHub Pages serves the `./out` artifact directly across GitHub's global CDN. **No live Node.js runtime server is required on the host.**
-
-### One-Time Setup for Repository Maintainers
-1. In your GitHub repository, navigate to **Settings** > **Pages**.
-2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
-3. All subsequent commits to `main` will automatically build and publish the website live!
-
----
-
-## 🤝 Contributing & Code Guidelines
-
-We welcome contributions from IEEE PEC members, student developers, and maintainers! Please refer to the **[CONTRIBUTING.md](CONTRIBUTING.md)** guide for:
-- How to add or update events, projects, resources, and team profiles in `src/data/`
-- Branch naming and conventional commit standards
-- Pull request review guidelines
-
----
-
-## 💙 Author & Maintainer
-
-Designed & Developed with 💙 by **[Pratyush Kumar](https://github.com/pratstick)** (Web & IT Mentor, IEEE PEC Student Branch).
-
-Maintained by the **IEEE PEC Student Branch Web & Tech Team**.
+Production commits pushed to `main` are automatically built and deployed by Vercel to **[https://ieeepec.vercel.app](https://ieeepec.vercel.app)**.
 
 ---
 

@@ -1,8 +1,8 @@
 # IEEE PEC Student Branch Website — Complete Developer Guide
 
-Welcome to the official repository for the **IEEE Student Branch at Punjab Engineering College (PEC), Chandigarh** website.
+Welcome to the official repository for the **IEEE Student Branch at Punjab Engineering College (PEC), Chandigarh** website and audition portal.
 
-This guide provides a comprehensive walkthrough of the website's architecture, technology stack, directory structure, component library, routing, backend integration, and local setup instructions.
+This guide provides a comprehensive technical reference for the website's architecture, technology stack, directory structure, component library, routing, backend integration, and local setup instructions.
 
 ---
 
@@ -10,15 +10,34 @@ This guide provides a comprehensive walkthrough of the website's architecture, t
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| **Framework** | [Next.js 15 (Pages Router)](https://nextjs.org/) | React framework for static export and client-side page routing |
+| **Framework** | [Next.js 15 (Pages Router)](https://nextjs.org/) | React framework with static export and client-side page routing |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) | Type-safe application development |
 | **Styling** | [Tailwind CSS 3.4](https://tailwindcss.com/) | Utility-first responsive CSS styling with dark mode support |
-| **UI Components** | [Radix UI](https://www.radix-ui.com/) & [shadcn/ui](https://ui.shadcn.com/) | Accessible, unstyled UI primitives (Dialog, Popover, Sheet, Tabs, etc.) |
-| **Icons** | [Lucide React](https://lucide.dev/) | Clean, consistent SVG icon set |
-| **Animations** | [Framer Motion](https://www.framer.com/motion/) | Smooth carousel transitions and interactive effects |
+| **UI Components** | [Radix UI](https://www.radix-ui.com/) & [shadcn/ui](https://ui.shadcn.com/) | Accessible UI primitives (Dialog, Popover, Sheet, Tabs, Accordion, etc.) |
+| **Icons** | [Lucide React](https://lucide.dev/) | SVG icon set for navigation, buttons, and badges |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) | Carousel transitions and interactive entrance effects |
 | **Notifications** | [Sonner](https://sonner.emilkowal.ski/) | Lightweight toast notification system |
 | **Backend / Database** | [Supabase](https://supabase.com/) | PostgreSQL database, Authentication (Google OAuth), Storage, and Row-Level Security |
-| **Deployment** | [Vercel](https://vercel.com/) | Global edge hosting with fast static delivery |
+| **Deployment** | [Vercel](https://vercel.com/) | Global edge hosting with fast static delivery and auto-deploy from `main` |
+
+---
+
+## ⚡ Key Pages & Routes
+
+| Route | Name | Description |
+|---|---|---|
+| `/` | **Homepage** | Hero carousel, branch overview, live stats counter, chapters showcase, featured projects & events |
+| `/chapters` | **Chapters** | Dedicated overview of Computer Society (CS), Power & Energy (PES), and Women in Engineering (WIE) |
+| `/project` | **Projects** | Showcase of Robo-Soccer bots, IoT weather stations, RC hovercrafts, and web platforms |
+| `/events` | **Events** | Comprehensive event archive with category filters and inline admin editing controls |
+| `/resources` | **Resources** | Curated roadmaps for C++, ROS 2, Embedded Systems, Web Development, and PCB design |
+| `/team` | **WebDev & Core Team** | Executive committee and technical leads with photo gallery, social links, and category filters |
+| `/contact` | **Contact Us** | Direct query submission form and branch office location |
+| `/apply` | **Apply & Audition Portal** | Candidate application form, PEC SID year detection, audition status, and published results |
+| `/interview-login`| **Login** | Google OAuth login portal restricted to official PEC accounts (`@pec.edu.in`) |
+| `/interview` | **Interview Evaluation** | Candidate evaluation scoring sheet and recruitment pipeline for authorized interviewers |
+| `/admin` | **Admin Dashboard** | Results release toggle, WebDev team management & photo uploads, member promotion, and user role controls |
+| `/inventory` | **Lab Inventory** | Hardware catalog & electronic component borrowing management |
 
 ---
 
@@ -36,18 +55,19 @@ IEEE-PEC-Website/
 ├── src/
 │   ├── components/             # Reusable UI & section components
 │   │   ├── layout/
-│   │   │   ├── Header.tsx      # Main site navigation, auth avatar & theme switch
+│   │   │   ├── Header.tsx      # Main navigation, auth profile dropdown & dark mode switch
 │   │   │   ├── Footer.tsx      # Site footer with chapter and social links
 │   │   │   └── PageHead.tsx    # Dynamic HTML title and SEO meta tags
 │   │   ├── ui/                 # Atomic design components (button, dialog, input, etc.)
 │   │   ├── ChaptersSection.tsx # Overview of CS, PES, and WIE chapters
-│   │   ├── EditEventDialog.tsx # Admin dialog for editing/creating events & photo upload
-│   │   ├── EventCard.tsx       # Interactive event display card with modal overview
+│   │   ├── EditEventDialog.tsx # Admin dialog for editing/creating events & photo uploads
+│   │   ├── EditTeamMemberDialog.tsx # Admin dialog for adding/editing WebDev team members & photo uploads
+│   │   ├── EventCard.tsx       # Interactive event display card with admin edit trigger
 │   │   ├── Hero.tsx            # Fullscreen dynamic image carousel with CTA
-│   │   ├── InventoryCatalog.tsx# Society hardware component inventory tracker
+│   │   ├── InventoryCatalog.tsx# Hardware inventory tracker component
 │   │   ├── ProjectCard.tsx     # Student engineering project showcase card
 │   │   ├── StatsSection.tsx    # Numerical impact counter (members, events, workshops)
-│   │   └── TeamMemberCard.tsx  # Executive committee member card with socials
+│   │   └── TeamMemberCard.tsx  # Team member card with photos & social icons
 │   ├── context/
 │   │   └── ThemeContext.tsx    # Dark/Light theme state provider (localStorage backed)
 │   ├── data/                   # Static fallback data files
@@ -58,28 +78,28 @@ IEEE-PEC-Website/
 │   │   ├── resources_data.ts   # Roadmaps, study guides, and cheatsheets
 │   │   └── team_details.ts     # Executive leadership details and social handles
 │   ├── hooks/
-│   │   └── useAdmin.ts         # Hook to check if the current user has admin privileges
+│   │   └── useAdmin.ts         # Hook to check if current user has admin privileges
 │   ├── lib/
 │   │   ├── supabase/
 │   │   │   └── supabase.ts     # Supabase client initialization
 │   │   └── utils.ts            # Helper utilities (cn, getAssetPath, formatDate)
 │   ├── pages/                  # Next.js Pages Router routes
 │   │   ├── _app.tsx            # Global App wrapper (Theme, Toast providers)
-│   │   ├── _document.tsx       # HTML structure and external font imports
+│   │   ├── _document.tsx       # HTML structure and font imports
 │   │   ├── 404.tsx             # Custom 404 error page
 │   │   ├── index.tsx           # Website homepage
 │   │   ├── apply.tsx           # Auditions & membership application form
 │   │   ├── chapters/           # Chapter exploration pages (CS, PES, WIE)
 │   │   ├── contact.tsx         # Contact form and branch office location
 │   │   ├── events/             # Events, workshops, and Techadroit symposiums
-│   │   ├── admin/              # Admin management and member promotion dashboard (src/pages/admin/index.tsx)
-│   │   ├── interview.tsx       # Interview evaluation portal for seniors
+│   │   ├── admin/              # Admin dashboard (src/pages/admin/index.tsx)
+│   │   ├── interview.tsx       # Evaluation portal for interviewers
 │   │   ├── interview-login.tsx # Google OAuth login portal for PEC accounts
-│   │   ├── inventory/          # Lab hardware & component inventory catalog (src/pages/inventory/index.tsx)
+│   │   ├── inventory/          # Lab hardware inventory catalog (src/pages/inventory/index.tsx)
 │   │   ├── pending.tsx         # Account pending approval waiting screen
-│   │   ├── project/            # Student hardware & software projects gallery
-│   │   ├── resources/          # Technical guides, roadmaps, and cheat sheets
-│   │   ├── team/               # Webdev & executive leadership page
+│   │   ├── project/            # Student projects gallery
+│   │   ├── resources/          # Technical guides and roadmaps
+│   │   ├── team/               # WebDev & executive leadership page
 │   │   └── auth/
 │   │       └── callback.tsx    # Supabase OAuth redirect and auto-provisioning
 │   ├── styles/
@@ -91,27 +111,8 @@ IEEE-PEC-Website/
 ├── package.json                # Project dependencies and npm scripts
 ├── tailwind.config.ts          # Tailwind configuration (colors, dark mode: 'class')
 ├── tsconfig.json               # TypeScript compiler options
-└── README.md                   # Repository overview
+└── README.md                   # Main repository overview
 ```
-
----
-
-## ⚡ Key Pages & Routes
-
-| Route | Name | Description |
-|---|---|---|
-| `/` | **Homepage** | Hero carousel, branch overview, stats, chapters showcase, featured projects & events |
-| `/chapters` | **Chapters** | Dedicated overview of Computer Society (CS), Power & Energy (PES), and Women in Engineering (WIE) |
-| `/project` | **Projects** | Showcase of Robo-Soccer bots, IoT weather stations, RC hovercrafts, and web platforms |
-| `/events` | **Events** | Comprehensive event archive with category filters and admin editing controls |
-| `/resources` | **Resources** | Curated roadmaps for C++, ROS 2, Embedded Systems, Web Development, and PCB design |
-| `/team` | **Webdev Team** | Executive committee and technical leads |
-| `/contact` | **Contact Us** | Direct query submission form and branch office details |
-| `/apply` | **Apply & Audition Portal** | Auditions form, application status, and published results |
-| `/interview-login`| **Login** | Google OAuth login for PEC students and interviewers |
-| `/interview` | **Interview Portal** | Scoring sheet and candidate pipeline for authorized interviewers |
-| `/admin` | **Admin Dashboard** | Member promotion, result release toggles, and role controls |
-| `/inventory` | **Lab Inventory** | Lab hardware and electronic components management |
 
 ---
 
@@ -120,7 +121,7 @@ IEEE-PEC-Website/
 ### 1. Prerequisites
 - [Node.js](https://nodejs.org/) (version 18 or higher recommended)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- A [Supabase](https://supabase.com/) project (for authentication and database)
+- A [Supabase](https://supabase.com/) project (for authentication, PostgreSQL database, and Storage)
 
 ### 2. Clone the Repository
 ```bash
@@ -141,10 +142,10 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
 ### 5. Setup Database Schema
-Open your Supabase project dashboard, navigate to the **SQL Editor**, and run the entire script found in:
+Open your Supabase project dashboard, navigate to the **SQL Editor**, and run the script found in:
 [`supabase/schema.sql`](./supabase/schema.sql)
 
-Also ensure you have created a public Storage bucket named `event-images`.
+Also ensure public Storage buckets `event-images` and `team-images` are created.
 
 ### 6. Run the Development Server
 ```bash
@@ -156,14 +157,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📦 Building for Production
 
-This project uses Next.js Static HTML Export (`output: export` in `next.config.js`).
-
 To create an optimized production build:
 ```bash
 npm run build
 ```
 
-This generates a static export in the `out/` directory, ready to be served from any CDN or static hosting platform like Vercel, GitHub Pages, or Netlify.
+This compiles all pages and exports static assets ready for deployment on Vercel or any static host.
 
 ---
 
@@ -171,18 +170,6 @@ This generates a static export in the `out/` directory, ready to be served from 
 
 The site features two themes configured in `src/styles/globals.css`:
 - **Light Mode (`Clean Minimalist`):** Crisp white backgrounds, clean IEEE blue `#00629B` accents, and dark slate typography.
-- **Dark Mode (`Midnight Cyber`):** Rich navy (`#0a1628`), electric cyan `#00A3E0` and `#06b6d4` highlights, subtle glassmorphism (`.glass-card`), and custom cyber scrollbars.
+- **Dark Mode (`Midnight Cyber`):** Rich navy (`#0a1628`), electric cyan `#00A3E0` highlights, glassmorphic card styling, and dark scrollbars.
 
 Tailwind activates dark mode via the `.dark` class toggled on the `<html>` element by `src/context/ThemeContext.tsx`.
-
----
-
-## 🤝 Contributing
-
-1. Create a feature branch from `main` or the active working branch (`git checkout -b feature/your-feature`).
-2. Make your changes and test the build (`npm run build`).
-3. Commit with clear, descriptive commit messages:
-   ```bash
-   git commit -m "feat(events): add filter for flagship workshops"
-   ```
-4. Push to your branch and open a Pull Request.
